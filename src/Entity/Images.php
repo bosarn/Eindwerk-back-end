@@ -38,6 +38,11 @@ class Images
      */
     private $path;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Printedobject::class, inversedBy="images")
+     */
+    private $printedobjects;
+
 
     public function getId(): ?int
     {
@@ -76,6 +81,18 @@ class Images
     public function setPath(string $path): self
     {
         $this->path = $path;
+
+        return $this;
+    }
+
+    public function getPrintedobjects(): ?Printedobject
+    {
+        return $this->printedobjects;
+    }
+
+    public function setPrintedobjects(?Printedobject $printedobjects): self
+    {
+        $this->printedobjects = $printedobjects;
 
         return $this;
     }

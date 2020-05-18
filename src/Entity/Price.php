@@ -29,6 +29,12 @@ class Price
      */
     private $description;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Printedobject::class, inversedBy="Price")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $Printedobject;
+
 
     public function getId(): ?int
     {
@@ -55,6 +61,18 @@ class Price
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getPrintedobject(): ?Printedobject
+    {
+        return $this->Printedobject;
+    }
+
+    public function setPrintedobject(?Printedobject $Printedobject): self
+    {
+        $this->Printedobject = $Printedobject;
 
         return $this;
     }

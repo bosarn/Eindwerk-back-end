@@ -10,8 +10,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={"order:read","detail:read"}, "swagger_definition_name"="Read"},
- *     denormalizationContext={"groups"={"order:write", "detail:write"}, "swagger_definition_name"="Write"},
+ *     normalizationContext={"groups"={"detail:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"detail:write"}, "swagger_definition_name"="Write"},
  * )
  * @ORM\Entity(repositoryClass=OrderDetailsRepository::class)
  *
@@ -27,7 +27,7 @@ class OrderDetails
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"detail:read","detail:write","order:write"})
+     * @Groups({"detail:read","detail:write","order:write", "order:read"})
      */
     private $quantity;
 
@@ -40,7 +40,7 @@ class OrderDetails
     /**
      * @ORM\ManyToOne(targetEntity=Orders::class, inversedBy="details")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"detail:read","detail:write","order:write"})
+     * @Groups({"detail:read","detail:write"})
      */
     private $orders;
 

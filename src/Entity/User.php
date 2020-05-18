@@ -12,8 +12,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={"user:read", "order:read"}},
- *     denormalizationContext={"groups"={"user:write", "order:write"}},
+ *     normalizationContext={"groups"={"user:read"}},
+ *     denormalizationContext={"groups"={"user:write"}},
  *
  * )
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -29,7 +29,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write","order:read"})
      */
     private $email;
 
@@ -42,7 +42,7 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Groups({"user:write"})
+     * @Groups({"user:write","order:read"})
      */
     private $password;
 
@@ -55,7 +55,7 @@ class User implements UserInterface
     /**
      *
      * @ORM\OneToMany(targetEntity=Orders::class, mappedBy="user")
-     * @Groups({"user:read"})
+     *@Groups({"user:read", "user:write"})
      */
     private $orders;
 

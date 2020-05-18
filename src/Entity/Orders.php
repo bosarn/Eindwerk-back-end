@@ -11,8 +11,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={"order:read","user:read","details:read"}, "swagger_definition_name"="Read"},
- *     denormalizationContext={"groups"={"order:write","user:write","details:write"}, "swagger_definition_name"="Write"},
+ *     normalizationContext={"groups"={"order:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"order:write"}, "swagger_definition_name"="Write"},
  *
  * )
  * @ORM\Entity(repositoryClass=OrdersRepository::class)
@@ -28,13 +28,13 @@ class Orders
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"order:read","user:read"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"order:read", "order:write", "user:read", "user:write"})
+     * @Groups({"order:read", "order:write","user:read"})
      */
     private $status;
 
@@ -46,12 +46,13 @@ class Orders
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"order:read", "order:write", "user:read", "user:write"})
+     * @Groups({"order:read", "order:write"})
      */
     private $shippingAdress;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"order:read", "order:write"})
      */
     private $invoice;
 
@@ -152,14 +153,14 @@ class Orders
     }
 
     /**
-     * @return Collection|Orderdetails[]
+     * @return Collection|OrderDetails[]
      */
     public function getDetails(): Collection
     {
         return $this->details;
     }
 
-    public function addDetail(Orderdetails $detail): self
+    public function addDetail(OrderDetails $detail): self
     {
         if (!$this->details->contains($detail)) {
             $this->details[] = $detail;
@@ -169,7 +170,7 @@ class Orders
         return $this;
     }
 
-    public function removeDetail(Orderdetails $detail): self
+    public function removeDetail(OrderDetails $detail): self
     {
         if ($this->details->contains($detail)) {
             $this->details->removeElement($detail);

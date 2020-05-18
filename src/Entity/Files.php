@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\FilesRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -26,8 +27,15 @@ class Files
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"order:read", "order:write"})
      */
     private $GCODE;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Printedobject::class, inversedBy="Files")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $Printedobject;
 
 
     public function getId(): ?int
@@ -55,6 +63,18 @@ class Files
     public function setGCODE(string $GCODE): self
     {
         $this->GCODE = $GCODE;
+
+        return $this;
+    }
+
+    public function getPrintedobject(): ?Printedobject
+    {
+        return $this->Printedobject;
+    }
+
+    public function setPrintedobject(?Printedobject $Printedobject): self
+    {
+        $this->Printedobject = $Printedobject;
 
         return $this;
     }

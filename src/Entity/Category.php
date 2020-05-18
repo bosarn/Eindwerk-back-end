@@ -9,7 +9,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={"get", "post"},
+ *     itemOperations={"get", "put"},
+ * )
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
  */
 class Category
@@ -31,10 +34,15 @@ class Category
      */
     private $description;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Printedobject::class, inversedBy="Categories")
+     */
+    private $Printedobject;
+
 
     public function __construct()
     {
-
+        $this->Printedobject = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -62,6 +70,32 @@ class Category
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Printedobject[]
+     */
+    public function getPrintedobject(): Collection
+    {
+        return $this->Printedobject;
+    }
+
+    public function addPrintedobject(Printedobject $printedobject): self
+    {
+        if (!$this->Printedobject->contains($printedobject)) {
+            $this->Printedobject[] = $printedobject;
+        }
+
+        return $this;
+    }
+
+    public function removePrintedobject(Printedobject $printedobject): self
+    {
+        if ($this->Printedobject->contains($printedobject)) {
+            $this->Printedobject->removeElement($printedobject);
+        }
 
         return $this;
     }
