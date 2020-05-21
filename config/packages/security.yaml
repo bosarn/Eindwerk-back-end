@@ -1,7 +1,7 @@
 security:
     encoders:
         App\Entity\User:
-            algorithm: auto
+            algorithm: bcrypt
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
@@ -11,12 +11,33 @@ security:
                 class: App\Entity\User
                 property: email
     firewalls:
+        login:
+            pattern:  ^/api/login
+            stateless: true
+            anonymous: true
+            json_login:
+                check_path:               /api/login
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+
+        main:
+            anonymous: true
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+                    - lexik_jwt_authentication.jwt_token_authenticator
+
+                entry_point: App\Security\LoginFormAuthenticator
+            logout:
+                path:   app_logout
+                invalidate_session: true
+
+
+
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
-            anonymous: lazy
-            provider: app_user_provider
+
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -29,3 +50,5 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }

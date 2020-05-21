@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}SUCCCESSS!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+
         {% block body %}{% endblock %}
+    {% block main %}<a href="{{ path('app_logout') }}">Logout</a>{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
 </html>

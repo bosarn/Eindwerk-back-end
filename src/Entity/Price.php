@@ -5,9 +5,15 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PriceRepository;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"price:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"price:write"}, "swagger_definition_name"="Write"},
+ *     collectionOperations={"get", "post"},
+ *     itemOperations={"get", "put"},
+ * )
+ *
  * @ORM\Entity(repositoryClass=PriceRepository::class)
  */
 class Price
@@ -21,11 +27,13 @@ class Price
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"order:read","object:read","object:write", "order:write"})
      */
     private $value;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"order:read","object:write", "detail:write","order:write","price:write"})
      */
     private $description;
 

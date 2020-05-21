@@ -13,6 +13,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"={"object:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"object:write"}, "swagger_definition_name"="Write"},
+ *     collectionOperations={"get", "post"},
+ *     itemOperations={"get", "put","delete"},
  * )
  * @ORM\Entity(repositoryClass=PrintedobjectRepository::class)
  */
@@ -27,56 +29,57 @@ class Printedobject
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"order:read"})
+     * @Groups({"detail:write"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"order:read", "order:write"})
+     *@Groups({"detail:write","object:write"})
      */
     private $printTime;
 
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"object:read","order:read", "order:write"})
+     *@Groups({"detail:write","object:read", "object:write"})
      */
     private $size;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"object:read","order:read", "order:write"})
+     * @Groups({"detail:read","detail:write"})
      */
     private $GCODE;
 
     /**
      * @ORM\OneToMany(targetEntity=OrderDetails::class, mappedBy="objects")
-     * @Groups({"detail:read"})
+     *
      */
     private $details;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="Printedobject")
-     * @Groups({"object:read","order:read", "order:write"})
+     * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="Printedobject",cascade={"persist"})
+     * @Groups({"order:write","object:write"})
      */
     private $Categories;
 
     /**
-     * @ORM\OneToMany(targetEntity=Files::class, mappedBy="Printedobject")
-     * @Groups({"object:read","order:read", "order:write"})
+     * @ORM\OneToMany(targetEntity=Files::class, mappedBy="Printedobject",cascade={"persist"})
+     * @Groups({"object:read","object:write","detail:write"})
      */
     private $Files;
 
     /**
-     * @ORM\OneToMany(targetEntity=Images::class, mappedBy="printedobjects")
-     * @Groups({"object:read","order:read", "order:write"})
+     * @ORM\OneToMany(targetEntity=Images::class, mappedBy="printedobjects",cascade={"persist"})
+     * @Groups({"detail:read","object:read", "object:write"})
      *
      */
     private $images;
 
     /**
-     * @ORM\OneToMany(targetEntity=Price::class, mappedBy="Printedobject")
+     * @ORM\OneToMany(targetEntity=Price::class, mappedBy="Printedobject",cascade={"persist"})
+     *@Groups({"object:read","object:write"})
      */
     private $Price;
 

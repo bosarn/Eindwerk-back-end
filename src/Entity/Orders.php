@@ -13,9 +13,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"={"order:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"order:write"}, "swagger_definition_name"="Write"},
- *
+ *     attributes={"security"="is_granted('ROLE_USER')"},
+ *     collectionOperations={
+ *         "get",
+ *         "post",
+ *     },
+ *     itemOperations={
+ *         "get"={"security"="is_granted('ROLE_ADMIN') or object.user == user","security_message"="Sorry, this is not your order."},
+ *         "put"={"security"="is_granted('ROLE_ADMIN') or object.user == user"},
+ *     }
  * )
  * @ORM\Entity(repositoryClass=OrdersRepository::class)
+ * @ORM\EntityListeners({"App\OrderUserListener"})
  */
 class Orders
 {
@@ -27,47 +36,50 @@ class Orders
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"order:read","user:read"})
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"order:read","user:read","user:write"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"order:read", "order:write","user:read"})
+     * @Groups({"order:read", "order:write","user:read","user:write"})
      */
     private $status;
 
     /**
      * @ORM\Column(type="date", nullable=true)
-     * @Groups({"order:read", "order:write", "user:read", "user:write"})
+     * @Groups({"order:read", "order:write", "user:read","user:write"})
      */
     private $date;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"order:read", "order:write"})
+     * @Groups({"order:read", "order:write", "user:read","user:write"})
      */
     private $shippingAdress;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"order:read", "order:write"})
+     * @Groups({"user:read","user:write"})
      */
     private $invoice;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="orders")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="orders",cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      * @Groups({"order:read", "order:write"})
+     *
      */
-    private $user;
+    public $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=OrderDetails::class, mappedBy="orders")
+     * @ORM\OneToMany(targetEntity=OrderDetails::class, mappedBy="orders",cascade={"persist"})
      * @Groups({"order:read","order:write"})
      */
     private $details;
+
+
 
     public function __construct()
     {

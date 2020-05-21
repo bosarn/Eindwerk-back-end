@@ -7,11 +7,13 @@ use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource(
+ *     normalizationContext={"groups"={"category:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"category:write"}, "swagger_definition_name"="Write"},
  *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put"},
+ *     itemOperations={"get", "put","delete"},
  * )
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
  */
@@ -26,11 +28,13 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"object:read","category:write"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"object:read","category:write","category:read"})
      */
     private $description;
 

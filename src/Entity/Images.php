@@ -5,11 +5,14 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ImagesRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
+ *     normalizationContext={"groups"={"image:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"image:write"}, "swagger_definition_name"="Write"},
  *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put"},
+ *     itemOperations={"get", "put","delete"},
  *     shortName="img"
  * )
  * @ORM\Entity(repositoryClass=ImagesRepository::class)
@@ -25,16 +28,19 @@ class Images
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"object:read","object:write", "order:write","image:write","detail:write"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"object:read","object:write", "order:write","image:write","detail:write"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"object:read","object:write", "order:write","image:write","detail:write"})
      */
     private $path;
 

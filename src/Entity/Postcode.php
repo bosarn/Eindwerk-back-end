@@ -5,10 +5,16 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PostcodeRepository;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"code:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"code:write"}, "swagger_definition_name"="Write"},
+ *     collectionOperations={"get", "post"},
+ *     itemOperations={"get", "put","delete"},
+ * )
  * @ORM\Entity(repositoryClass=PostcodeRepository::class)
+ *
  */
 class Postcode
 {
@@ -21,17 +27,20 @@ class Postcode
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"code:read","code:write"})
      */
     private $gemeente;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"code:read","code:write"})
      */
     private $postcode;
 
     /**
      * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
+     *
      */
     private $user;
 

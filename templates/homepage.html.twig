@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <p>Email: {{ app.user.email }}</p>
+            {% endif %}
+            <a href="#">apitest</a>
+        </div>
+    </div>
+{% endblock %}

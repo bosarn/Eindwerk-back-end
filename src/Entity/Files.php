@@ -8,7 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"file:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"file:write"}, "swagger_definition_name"="Write"},
+ *         collectionOperations={"get", "post"},
+ *         itemOperations={"get", "put","delete"},
+ * )
  * @ORM\Entity(repositoryClass=FilesRepository::class)
  */
 class Files
@@ -22,12 +27,13 @@ class Files
 
     /**
      * @ORM\Column(type="string", length=255)
+     *@Groups({"detail:write","file:write","object:read","object:write"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"order:read", "order:write"})
+     * @Groups({"detail:write","order:read","file:write","object:read"})
      */
     private $GCODE;
 

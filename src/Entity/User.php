@@ -14,6 +14,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"={"user:read"}},
  *     denormalizationContext={"groups"={"user:write"}},
+ *     collectionOperations={"get", "post"},
+ *     itemOperations={"get", "put","delete"},
  *
  * )
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -29,7 +31,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"user:read", "user:write","order:read"})
+     * @Groups({"user:read", "user:write","order:read","order:write"})
      */
     private $email;
 
@@ -42,20 +44,19 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Groups({"user:write","order:read"})
+     * @Groups({"user:write","order:write"})
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write","order:write","order:read"})
      */
     private $name;
 
     /**
-     *
-     * @ORM\OneToMany(targetEntity=Orders::class, mappedBy="user")
-     *@Groups({"user:read", "user:write"})
+     * @ORM\OneToMany(targetEntity=Orders::class, mappedBy="user",cascade={"persist"})
+     * @Groups({"user:read","user:write"})
      */
     private $orders;
 
@@ -165,8 +166,12 @@ class User implements UserInterface
     public function addOrder(Orders $order): self
     {
         if (!$this->orders->contains($order)) {
+
             $this->orders[] = $order;
             $order->setUser($this);
+
+
+
         }
 
         return $this;
