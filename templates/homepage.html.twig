@@ -6,7 +6,7 @@
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <p>Email: {{ app.user.email }}</p>
             {% endif %}
-            <a href="#">Test the API</a>
+            <a href="/api">Test the API</a>
         </div>
     </div>
 {% endblock %}

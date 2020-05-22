@@ -10,8 +10,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"={"price:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"price:write"}, "swagger_definition_name"="Write"},
- *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put"},
+ *     collectionOperations={
+ *         "get"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "post"={"security"="is_granted('ROLE_ADMIN')"},
+ *     },
+ *     itemOperations={
+ *         "get"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "put"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "delete"={"security"="is_granted('ROLE_ADMIN')"}
+ *     }
  * )
  *
  * @ORM\Entity(repositoryClass=PriceRepository::class)
@@ -33,7 +40,7 @@ class Price
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"order:read","object:write", "detail:write","order:write","price:write"})
+     * @Groups({"order:read","object:read", "detail:write","order:write","price:write"})
      */
     private $description;
 

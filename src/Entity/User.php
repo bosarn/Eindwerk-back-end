@@ -14,8 +14,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"={"user:read"}},
  *     denormalizationContext={"groups"={"user:write"}},
- *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put","delete"},
+collectionOperations={
+ *         "get"={"security"="is_granted('ROLE_ADMIN')","security_message"="Only admin can see all users."},
+ *         "post",
+ *     },
+ *     itemOperations={
+ *         "get"={"security"="is_granted('ROLE_ADMIN') or object == user","security_message"="Sorry, this is not you."},
+ *         "put"={"security"="is_granted('ROLE_ADMIN') or object == user"},
+ *         "delete"={"security"="is_granted('ROLE_ADMIN')"}
+ *     }
  *
  * )
  * @ORM\Entity(repositoryClass=UserRepository::class)

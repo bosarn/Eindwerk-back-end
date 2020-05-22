@@ -11,8 +11,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"={"file:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"file:write"}, "swagger_definition_name"="Write"},
- *         collectionOperations={"get", "post"},
- *         itemOperations={"get", "put","delete"},
+ *     collectionOperations={
+ *         "get"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "post"={"security"="is_granted('ROLE_ADMIN')"},
+ *     },
+ *     itemOperations={
+ *         "get"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "put"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "delete"={"security"="is_granted('ROLE_ADMIN')"}
+ *     }
  * )
  * @ORM\Entity(repositoryClass=FilesRepository::class)
  */
@@ -27,13 +34,13 @@ class Files
 
     /**
      * @ORM\Column(type="string", length=255)
-     *@Groups({"detail:write","file:write","object:read","object:write"})
+     *@Groups({"detail:write","file:write","object:write"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"detail:write","order:read","file:write","object:read"})
+     * @Groups({"detail:write","order:read","file:write"})
      */
     private $GCODE;
 

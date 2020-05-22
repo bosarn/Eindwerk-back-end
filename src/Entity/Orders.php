@@ -15,8 +15,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     denormalizationContext={"groups"={"order:write"}, "swagger_definition_name"="Write"},
  *     attributes={"security"="is_granted('ROLE_USER')"},
  *     collectionOperations={
- *         "get",
- *         "post",
+ *         "get"={"security"="is_granted('ROLE_ADMIN')","security_message"="Only admin can see all orders."},
+ *         "post"={"security"="is_granted('ROLE_USER') ","security_message"="Sorry, log in first."},
  *     },
  *     itemOperations={
  *         "get"={"security"="is_granted('ROLE_ADMIN') or object.user == user","security_message"="Sorry, this is not your order."},
@@ -37,7 +37,7 @@ class Orders
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"order:read","user:read","user:write"})
+     * @Groups({"order:read","order:write","user:read","user:write"})
      */
     private $description;
 
@@ -58,7 +58,6 @@ class Orders
      * @Groups({"order:read", "order:write", "user:read","user:write"})
      */
     private $shippingAdress;
-
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Groups({"user:read","user:write"})
@@ -81,9 +80,13 @@ class Orders
 
 
 
+
+
     public function __construct()
     {
         $this->details = new ArrayCollection();
+
+
     }
 
 
@@ -194,6 +197,8 @@ class Orders
 
         return $this;
     }
+
+
 
 
 

@@ -12,7 +12,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"={"detail:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"detail:write"}, "swagger_definition_name"="Write"},
-
+ *     collectionOperations={
+ *         "get"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "post"={"security"="is_granted('ROLE_ADMIN')"},
+ *     },
+ *     itemOperations={
+ *         "get"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "put"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "delete"={"security"="is_granted('ROLE_ADMIN')"}
+ *     }
  * )
  * @ORM\Entity(repositoryClass=OrderDetailsRepository::class)
  *
@@ -51,6 +59,7 @@ class OrderDetails
      * @Groups({"detail:write","detail:read","order:write","order:read"})
      */
     private $objects;
+
 
 
 
@@ -107,6 +116,7 @@ class OrderDetails
 
         return $this;
     }
+
 
 
 

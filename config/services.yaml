@@ -29,3 +29,13 @@ services:
     App\OrderUserListener:
         tags:
             - { name: doctrine.orm.entity_listener, lazy: true }
+
+    searchfilter:
+        parent: 'api_platform.doctrine.orm.date_filter'
+        arguments: [ { name: ~ } ]
+        tags:  [ 'api_platform.filter' ]
+        # The following are mandatory only if a _defaults section is defined
+        # You may want to isolate filters in a dedicated file to avoid adding them
+        autowire: false
+        autoconfigure: false
+        public: false

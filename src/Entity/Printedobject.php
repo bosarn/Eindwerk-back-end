@@ -2,22 +2,42 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Api\FilterInterface;
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use App\Repository\PrintedobjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Apiplatform\Core\Bridge\Doctrine\ORM\Filter\SearchFilter;
+use Apiplatform\Core\Serializer\Filter\PropertyFilter;
+
 
 /**
  * @ApiResource(
  *     normalizationContext={"groups"={"object:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"object:write"}, "swagger_definition_name"="Write"},
- *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put","delete"},
+ *     collectionOperations={
+ *         "get",
+ *         "post"={"security"="is_granted('ROLE_ADMIN')"},
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "delete"={"security"="is_granted('ROLE_ADMIN')"}
+ *     },
+ *     shortName="objects"
  * )
  * @ORM\Entity(repositoryClass=PrintedobjectRepository::class)
+ *  * @ApiFilter(
+ *     SearchFilter::class, properties={
+ *     "name": "partial"
+ *     }
+ * )
  */
+
 class Printedobject
 {
     /**
@@ -29,13 +49,13 @@ class Printedobject
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"detail:write"})
+     * @Groups({"detail:write","object:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="integer")
-     *@Groups({"detail:write","object:write"})
+     *@Groups({"detail:write","object:write","object:read"})
      */
     private $printTime;
 
@@ -48,7 +68,7 @@ class Printedobject
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"detail:read","detail:write"})
+     * @Groups({"detail:read","detail:write","object:read"})
      */
     private $GCODE;
 
@@ -60,13 +80,14 @@ class Printedobject
 
     /**
      * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="Printedobject",cascade={"persist"})
-     * @Groups({"order:write","object:write"})
+     * @Groups({"object:read","order:write","object:write"})
      */
     private $Categories;
 
     /**
      * @ORM\OneToMany(targetEntity=Files::class, mappedBy="Printedobject",cascade={"persist"})
-     * @Groups({"object:read","object:write","detail:write"})
+     * @Groups({"object:read","detail:write"})
+     * Object read to find out how many files in JS
      */
     private $Files;
 

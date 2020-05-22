@@ -12,8 +12,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"={"category:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"category:write"}, "swagger_definition_name"="Write"},
- *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "put","delete"},
+ *     collectionOperations={
+ *         "get",
+ *         "post"={"security"="is_granted('ROLE_ADMIN')"},
+ *     },
+ *     itemOperations={
+ *         "get"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "put"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "delete"={"security"="is_granted('ROLE_ADMIN')"}
+ *     }
  * )
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
  */
