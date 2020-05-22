@@ -85,7 +85,7 @@ class Orders
     public function __construct()
     {
         $this->details = new ArrayCollection();
-
+        $this->date = new\DateTimeImmutable();
 
     }
 
@@ -124,12 +124,6 @@ class Orders
         return $this->date;
     }
 
-    public function setDate(?\DateTimeInterface $date): self
-    {
-        $this->date = $date;
-
-        return $this;
-    }
 
     public function getShippingAdress(): ?string
     {

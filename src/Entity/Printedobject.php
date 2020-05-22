@@ -2,17 +2,17 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Api\FilterInterface;
+
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use App\Repository\PrintedobjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Apiplatform\Core\Bridge\Doctrine\ORM\Filter\SearchFilter;
-use Apiplatform\Core\Serializer\Filter\PropertyFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+
 
 
 /**
@@ -31,11 +31,9 @@ use Apiplatform\Core\Serializer\Filter\PropertyFilter;
  *     shortName="objects"
  * )
  * @ORM\Entity(repositoryClass=PrintedobjectRepository::class)
- *  * @ApiFilter(
- *     SearchFilter::class, properties={
- *     "name": "partial"
- *     }
+ * @ApiFilter( SearchFilter::class, properties={"name": "partial"}
  * )
+ *
  */
 
 class Printedobject
@@ -49,26 +47,26 @@ class Printedobject
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"detail:write","object:read"})
+     * @Groups({"object:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="integer")
-     *@Groups({"detail:write","object:write","object:read"})
+     *@Groups({"object:write","object:read"})
      */
     private $printTime;
 
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     *@Groups({"detail:write","object:read", "object:write"})
+     *@Groups({"object:read", "object:write"})
      */
     private $size;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"detail:read","detail:write","object:read"})
+     * @Groups({"detail:read","object:read"})
      */
     private $GCODE;
 
@@ -86,7 +84,7 @@ class Printedobject
 
     /**
      * @ORM\OneToMany(targetEntity=Files::class, mappedBy="Printedobject",cascade={"persist"})
-     * @Groups({"object:read","detail:write"})
+     * @Groups({"object:read"})
      * Object read to find out how many files in JS
      */
     private $Files;
