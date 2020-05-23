@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <p>Email: {{ app.user.email }}</p>
+            {% endif %}
+            <a href="/">Home</a>
+
+        </div>
+        <div>
+            {% for order in orders %}
+            <ul>
+                Order {{ order.id }} | {{ order.date | date ('d/m/Y') }}
+
+                <li> User Name: {{ order.user.name }}</li>
+                {% for object in order.Allobjects %}
+
+                <li>  Objectname: {{ object.name }}
+                    {% for detail in object.details %}
+                        {% if  order.id == detail.orders.id %}
+                            : {{ detail.quantity }}
+                        {% endif %}
+                </li>
+                    {% endfor %}
+                    Files:
+                    {% for file in object.files %}
+
+                        <li> {{ file.name }}</li>
+                        <button>Send file to printer</button>
+                    {% endfor %}
+
+                {% endfor %}
+            </ul>
+                <li> Order invoice: {{ order.invoice }}</li>
+                <a href="{{ path('print_invoice', {'id': order.id }) }}">Print invoice</a>
+                <hr>
+        {% endfor %}
+
+        </div>
+
+    </div>
+{% endblock %}

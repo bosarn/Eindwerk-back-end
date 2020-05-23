@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     itemOperations={
  *         "get"={"security"="is_granted('ROLE_ADMIN')"},
  *         "put"={"security"="is_granted('ROLE_ADMIN')"},
- *         "delete"={"security"="is_granted('ROLE_ADMIN')"}
+ *         "delete"={"security"="is_granted('ROLE_ADMI`N')"}
  *     }
  * )
  * @ORM\Entity(repositoryClass=OrderDetailsRepository::class)
@@ -32,7 +32,7 @@ class OrderDetails
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    public $id;
 
     /**
      * @ORM\Column(type="integer")

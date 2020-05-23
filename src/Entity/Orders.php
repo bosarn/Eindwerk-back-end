@@ -9,13 +9,14 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+
 /**
  * @ApiResource(
  *     normalizationContext={"groups"={"order:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"order:write"}, "swagger_definition_name"="Write"},
  *     attributes={"security"="is_granted('ROLE_USER')"},
  *     collectionOperations={
- *         "get"={"security"="is_granted('ROLE_ADMIN')","security_message"="Only admin can see all orders."},
+ *         "get",
  *         "post"={"security"="is_granted('ROLE_USER') ","security_message"="Sorry, log in first."},
  *     },
  *     itemOperations={
@@ -25,6 +26,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * )
  * @ORM\Entity(repositoryClass=OrdersRepository::class)
  * @ORM\EntityListeners({"App\OrderUserListener"})
+
  */
 class Orders
 {
@@ -37,30 +39,30 @@ class Orders
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"order:read","order:write","user:read","user:write"})
+     * @Groups({"order:read","order:write","user:read"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"order:read", "order:write","user:read","user:write"})
+     * @Groups({"order:read", "order:write","user:read"})
      */
     private $status;
 
     /**
      * @ORM\Column(type="date", nullable=true)
-     * @Groups({"order:read", "order:write", "user:read","user:write"})
+     * @Groups({"order:read", "order:write", "user:read"})
      */
     private $date;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"order:read", "order:write", "user:read","user:write"})
+     * @Groups({"order:read", "order:write", "user:read"})
      */
     private $shippingAdress;
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"user:read","user:write"})
+     * @Groups({"user:read"})
      */
     private $invoice;
 
@@ -169,6 +171,8 @@ class Orders
         return $this->details;
     }
 
+
+
     public function addDetail(OrderDetails $detail): self
     {
         if (!$this->details->contains($detail)) {
@@ -192,7 +196,15 @@ class Orders
         return $this;
     }
 
+    public function getAllObjects(){
+        $array = [];
+        $details =$this->getDetails();
+        foreach ($details as $detail){
 
+            array_push($array,$detail->getObjects());
+        }
+        return $array;
+    }
 
 
 

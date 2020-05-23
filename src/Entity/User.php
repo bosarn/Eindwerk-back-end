@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"={"user:read"}},
  *     denormalizationContext={"groups"={"user:write"}},
-collectionOperations={
+        collectionOperations={
  *         "get"={"security"="is_granted('ROLE_ADMIN')","security_message"="Only admin can see all users."},
  *         "post",
  *     },
@@ -63,7 +63,7 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Orders::class, mappedBy="user",cascade={"persist"})
-     * @Groups({"user:read","user:write"})
+     * @Groups({"user:read"})
      */
     private $orders;
 
