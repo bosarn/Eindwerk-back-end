@@ -28,13 +28,21 @@
                     {% for file in object.files %}
 
                         <li> {{ file.name }}</li>
-                        <button>Send file to printer</button>
+                        <form action="{{ path('send_file_to_printer', {'id': file.id ,'src': 'something' }) }}">
+                            <label for="src">
+                                Send to printer // make select options with argument of printers with status available
+                            </label>
+                            <input type="text" name="src" id="src">
+                            <input type="submit">
+
+                        </form>
+
                     {% endfor %}
 
                 {% endfor %}
             </ul>
                 <li> Order invoice: {{ order.invoice }}</li>
-                <a href="{{ path('print_invoice', {'id': order.id }) }}">Print invoice</a>
+                <a href="{{ path('print_invoice', {'id': order.id }) }}">Print invoice </a>
                 <hr>
         {% endfor %}
 

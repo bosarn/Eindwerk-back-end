@@ -23,6 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ORM\Entity(repositoryClass=PriceRepository::class)
  */
+// todo Calculate price by weight && printtime
 class Price
 {
     /**

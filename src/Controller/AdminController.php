@@ -52,25 +52,23 @@ class AdminController extends AbstractController
         // downloads file with invoice
         // sets order status to complete
         // redirects @return RedirectResponse
-
-
     }
 
     /**
      * @Route( "/admin/sendfiletoprinter/{id}", requirements={"id" = "\d+"}, name="send_file_to_printer")
-     * @param Printer $printer
-     * @param Files $files
+     * @param $fil
+     * @param $printe
      * @return void
      */
 
-public function sendFileToPrinter(Printer $printer, Files $files){
+public function sendFileToPrinter($fil,$printe){
     //todo
     // get printer id >> IP API key
     // does http post to pritner
     // adjust file to quantity minus 1
     // redirects
-
-
+    //Printer $printer, Files $files
+    dd($fil,$printe);
 }
 }
 
