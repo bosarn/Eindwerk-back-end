@@ -43,10 +43,9 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/orders", name="app_admin_orders")
      * @param OrdersRepository $repository
-     * @param OrdersRepository $orderDetails
      * @return Response
      */
-    public function orders(OrdersRepository $repository, OrdersRepository $orderDetails)
+    public function orders(OrdersRepository $repository )
     {
         //todo: find all by date desc && status ordered not finished
         $orders = $repository->findAll();
@@ -73,23 +72,25 @@ class AdminController extends AbstractController
      * @return void
      */
 
-public function sendFileToPrinter($fil,$printe){
-    //todo
-    // get printer id >> IP API key
-    // does http post to pritner
-    // adjust file to quantity minus 1
-    // redirects@return RedirectResponse
-    //Printer $printer, Files $files
+    public function sendFileToPrinter($fil, $printe)
+    {
+        //todo
+        // get printer id >> IP API key
+        // does http post to pritner
+        // adjust file to quantity minus 1
+        // redirects@return RedirectResponse
+        //Printer $printer, Files $files
 
-}
+    }
 
     /**
      * @Route("/admin/object/add", name="add_object")
      * @param Request $request
      * @return Response
      */
-    public function addobject (Request $request){
-        $entityManager = $this -> getDoctrine() ->getManager();
+    public function addobject(Request $request)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
 
         $name = $request->get('object_name');
         $printtime = $request->get('object_printtime');
@@ -107,9 +108,9 @@ public function sendFileToPrinter($fil,$printe){
         $object->setPrintTime($printtime);
         $object->setSize($size);
 
-        foreach($files as $file) {
+        foreach ($files as $file) {
             $newFiles = new Files();
-            $filledFiles = $newFiles ->setGCODE($file);
+            $filledFiles = $newFiles->setGCODE($file);
             $object->addFile($filledFiles);
         }
 
@@ -118,8 +119,39 @@ public function sendFileToPrinter($fil,$printe){
         return new Response('Object added');
         // todo redirect repsonse
     }
-}
 
+    /**
+     * @Route( "/admin/deleteobject/{id}", requirements={"id" = "\d+"}, name="delete_object")
+     * @param Request $request
+     * @return Response
+     */
+
+    public function deleteobject(Request $request, PrintedobjectRepository $repository)
+    {
+        $id = $request->get('id');
+        $em = $this->getDoctrine()->getManager();
+        $object = $repository->findOneBy(['id' => $id]);
+        $em->remove($object);
+        $em->flush();
+        return new Response('Object deleted');
+    }
+
+    /**
+     * @Route( "/admin/object/{id}", requirements={"id" = "\d+"}, name="object_detail")
+     * @param Request $request
+     * @param PrintedobjectRepository $repository
+     * @return Response
+     */
+
+public function objectdetail (Request $request, PrintedobjectRepository $repository)
+{
+    $id = $request->get('id');
+    $object = $repository->findOneBy(['id' => $id]);
+
+
+    return $this->render('admin/objectdetails.html.twig', ['object' => $object]);
+}
+}
 /**
  *
 

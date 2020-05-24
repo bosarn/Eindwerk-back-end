@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <p>Email: {{ app.user.email }}</p>
+            {% endif %}
+
+            <h1> Object: {{ object.id}}</h1>
+<label for="object_name">
+    Name:
+    <input type="text" name="object_name" value="{{ object.name }}">
+</label>
+            <label for="object_printtime">
+                printtime:
+                <input type="text" name="object_printtime" value="{{ object.PrintTime }}">
+            </label>
+            <label for="object_size">
+                Size:
+                <input type="text" name="object_size" value="{{ object.size }}">
+            </label>
+            <br>
+            <h2>Images</h2>
+            {% for image in object.Images %}
+
+                <label for="image_name">
+                    Image name
+                    <input type="text" name="object_name" value="{{ image.name }}">
+                </label>
+                <label for="image_path">
+                    Image Path
+                    <input type="text" name="object_name" value="{{ image.path }}">
+                </label>
+            <br>
+            {% endfor %}
+            <br>
+            <h2>Files</h2>
+            {% for file in object.files %}
+
+                <label for="image_name">
+                    file name
+                    <input type="text" name="object_name" value="{{ file.name }}">
+                </label>
+
+    <br>
+            {% endfor %}
+            <h2>Prices</h2>
+            {% for price in object.price %}
+
+                <label for="image_name">
+                    price name
+                    <input type="text" name="object_name" value="{{ price.value }}">
+                </label>
+
+
+            {% endfor %}
+
+
+
+
+            <a href="/">Home</a>
+        </div>
+    </div>
+{% endblock %}

@@ -77,27 +77,27 @@ class Printedobject
     private $details;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="Printedobject",cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="Printedobject",cascade={"remove"})
      * @Groups({"object:read","order:write","object:write"})
      */
     private $Categories;
 
     /**
-     * @ORM\OneToMany(targetEntity=Files::class, mappedBy="Printedobject",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Files::class, mappedBy="Printedobject",cascade={"remove"})
      * @Groups({"object:read"})
      * Object read to find out how many files in JS
      */
     private $Files;
 
     /**
-     * @ORM\OneToMany(targetEntity=Images::class, mappedBy="printedobjects",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Images::class, mappedBy="printedobjects",cascade={"remove"})
      * @Groups({"detail:read","object:read", "object:write"})
      *
      */
     private $images;
 
     /**
-     * @ORM\OneToMany(targetEntity=Price::class, mappedBy="Printedobject",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Price::class, mappedBy="Printedobject",cascade={"remove"})
      *@Groups({"object:read","object:write"})
      */
     private $Price;

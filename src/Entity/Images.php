@@ -52,7 +52,7 @@ class Images
     private $path;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Printedobject::class, inversedBy="images")
+     * @ORM\ManyToOne(targetEntity=Printedobject::class, inversedBy="images",cascade={"persist"})
      */
     private $printedobjects;
 

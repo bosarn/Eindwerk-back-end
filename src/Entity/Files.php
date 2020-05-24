@@ -45,7 +45,7 @@ class Files
     private $GCODE;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Printedobject::class, inversedBy="Files")
+     * @ORM\ManyToOne(targetEntity=Printedobject::class, inversedBy="Files",cascade={"remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $Printedobject;

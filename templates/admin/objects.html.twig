@@ -19,8 +19,10 @@
                      {{ image.name }}
                     {% endif %}
                 {% endfor %}
-
-                <a href="#">Delete</a>
+            <form action="{{ path('delete_object',{ 'id':  object.id  })  }}">
+                <input type="submit" value="Delete object">
+            </form>
+            <a href="{{ path('object_detail',{ 'id': object.id  }) }}">Details... </a>
                 <hr>
             {% endfor %}
             <a href="/">Home</a>
