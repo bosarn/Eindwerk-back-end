@@ -33,7 +33,7 @@ class Files
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      *@Groups({"detail:write","file:write","object:write"})
      */
     private $name;

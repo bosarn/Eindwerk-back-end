@@ -78,47 +78,51 @@ public function sendFileToPrinter($fil,$printe){
     // get printer id >> IP API key
     // does http post to pritner
     // adjust file to quantity minus 1
-    // redirects
+    // redirects@return RedirectResponse
     //Printer $printer, Files $files
 
 }
 
     /**
      * @Route("/admin/object/add", name="add_object")
+     * @param Request $request
      * @return Response
      */
-    public function addobject (Request $rokrest){
+    public function addobject (Request $request){
+        $entityManager = $this -> getDoctrine() ->getManager();
 
-    $rokrest->get('object_name');
-        $request = $this->requestStack->getCurrentRequest();
-         dd($request->getQueryString());
-         dd($request->request->all());
-        if ($request->getMethod() == "POST"){
-            echo $request->getContent();
+        $name = $request->get('object_name');
+        $printtime = $request->get('object_printtime');
+        $size = $request->get('object_size');
+        // todo find substr after word file, push to array
+        $files = $request->get('object_files');
+        $images = $request->get('object_images');
+        $prices = $request->get('object_prices');
 
 
-            return new Response('Saved new product with id ');
+        $object = new Printedobject();
+
+
+        $object->setName($name);
+        $object->setPrintTime($printtime);
+        $object->setSize($size);
+
+        foreach($files as $file) {
+            $newFiles = new Files();
+            $filledFiles = $newFiles ->setGCODE($file);
+            $object->addFile($filledFiles);
         }
-        dd($request);
-        return new Response('Not posted');
+
+        $entityManager->persist($object);
+        $entityManager->flush();
+        return new Response('Object added');
+        // todo redirect repsonse
     }
 }
 
 /**
  *
-$entityManager = $this -> getDoctrine() ->getManager();
 
-$object = new Printedobject();
-
-$object->setName($name);
-$object->setPrintTime($printtime);
-$object->setSize($size);
-foreach($files as $file){
-$object->addFile($file);
-}
-
-$entityManager->persist($object);
-$entityManager->flush();
 
 
  */
