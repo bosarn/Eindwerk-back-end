@@ -6,7 +6,47 @@
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <p>Email: {{ app.user.email }}</p>
             {% endif %}
+
+            {% for object in objects %}
+
+                Name: {{ object.Name }} <br>
+                Time to print: {{ object.PrintTime }}<br>
+                Size: {{ object.Size }}<br>
+                How many files: {{ object.files | length }}<br>
+
+                {% for image in object.Images %}
+                    {% if loop.first %}
+                     {{ image.name }}
+                    {% endif %}
+                {% endfor %}
+
+                <a href="#">Delete</a>
+                <hr>
+            {% endfor %}
             <a href="/">Home</a>
         </div>
+        <hr>
+
+        <form action="{{ path('add_object',{ 'object_size': "pitpqtsysynfony "  })  }}">
+            <label for="object_name">
+                Objectname
+            </label>
+            <input type="text" id="object_name" name="object_name">
+            <label for="object_printtime">
+                Printtime
+            </label>
+            <input type="text" name="object_printtime" id="object_printtime">
+            <label for="object_size">
+                Size
+            </label>
+            <input type="text" name="object_size" id="object_size">
+            <input type="submit" value="Save object">
+
+
+            Price + Files + Categories + Images
+
+
+
+        </form>
     </div>
 {% endblock %}
