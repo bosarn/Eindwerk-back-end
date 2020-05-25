@@ -32,7 +32,8 @@
                     Image Path
                     <input type="text" name="object_name" value="{{ image.path }}">
                 </label>
-            <br>
+                <img src="{{ image.path }}" alt="{{ image.name }}" width="100" height="100">
+                <br>
             {% endfor %}
             <br>
             <h2>Files</h2>

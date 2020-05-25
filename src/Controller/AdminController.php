@@ -90,7 +90,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/object/add", name="add_object")
      * @param Request $request
-     * @return Response
+     * @return RedirectResponse
      */
     public function addobject(Request $request )
     {
@@ -117,8 +117,8 @@ class AdminController extends AbstractController
             $newFiles = new Files();
             $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $filename = md5(uniqid()).'.'.$file->guessExtension();
-            $file->move($uploads_directory, $filename);
-            $newFiles->setGCODE('Change to Path file');
+            $file->move($uploads_directory.'/files/', $filename);
+            $newFiles->setGCODE('/uploads/files/'.$filename);
             $newFiles->setName($originalFilename);
             $object->addFile($newFiles);
             $entityManager->persist($newFiles);
@@ -127,8 +127,8 @@ class AdminController extends AbstractController
             $newImage = new Images();
             $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $imagefilename = md5(uniqid()).'.'.$image->guessExtension();
-            $image->move($uploads_directory, $imagefilename);
-            $newImage->setPath($imagefilename);
+            $image->move($uploads_directory.'/images/', $imagefilename);
+            $newImage->setPath('/uploads/images/'.$imagefilename);
             $newImage->setName($originalFilename);
             $object->addImage($newImage);
             $entityManager->persist($newImage);
@@ -137,8 +137,8 @@ class AdminController extends AbstractController
         $entityManager->persist($object);
         $entityManager->flush();
 
+        return $this->redirect('/admin/objects');
 
-        return new Response('Object added');
 
 
     }
@@ -157,7 +157,7 @@ class AdminController extends AbstractController
         $object = $repository->findOneBy(['id' => $id]);
         $em->remove($object);
         $em->flush();
-        return new Response('Object deleted');
+        return $this->redirect('/admin/objects');
     }
 
     /**
@@ -170,7 +170,6 @@ public function objectdetail (Request $request, PrintedobjectRepository $reposit
 {
     $id = $request->get('id');
     $object = $repository->findOneBy(['id' => $id]);
-
 
     return $this->render('admin/objectdetails.html.twig', ['object' => $object]);
 }
