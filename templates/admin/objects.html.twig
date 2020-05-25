@@ -27,9 +27,12 @@
             {% endfor %}
             <a href="/">Home</a>
         </div>
+        TODO add 1 file to db
+        Price + Files + Categories + Images
+        add js to add inputs
         <hr>
 
-        <form action="{{ path('add_object',{ 'object_size': "pitpqtsysynfony "  })  }}">
+        <form name="post" action="{{ path('add_object')  }}" method="POST" enctype="multipart/form-data">
             <label for="object_name">
                 Objectname
             </label>
@@ -42,15 +45,20 @@
                 Size
             </label>
             <input type="text" name="object_size" id="object_size">
+
             <label for="object_files">
-                File
+                Upload Files
             </label>
-            <input type="text" name="object_files" id="object_files">
+            <input type="file" name="object_files[]" id="object_files" multiple="multiple">
+
+            <label for="object_images">
+                Upload images
+            </label>
+            <input type="file" name="object_images[]" id="object_images" multiple="multiple">
+
             <input type="submit" value="Save object">
 
-            TODO add 1 file to db
-            Price + Files + Categories + Images
-            add js to add inputs
+
 
 
 

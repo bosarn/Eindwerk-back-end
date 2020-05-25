@@ -3,6 +3,8 @@
 
 namespace App\Controller;
 
+
+use App\Entity\Images;
 use App\Entity\Printer;
 use App\Entity\Files;
 use App\Repository\OrdersRepository;
@@ -11,13 +13,15 @@ use App\Repository\PrintedobjectRepository;
 use App\Entity\OrderDetails;
 use App\Entity\Orders;
 use App\Entity\Printedobject;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpClient\HttpClient;
+
+
 
 class AdminController extends AbstractController
 {
@@ -57,7 +61,7 @@ class AdminController extends AbstractController
      * @Route( "/admin/printinvoice/{id}", requirements={"id" = "\d+"}, name="print_invoice")
      *
      */
-    public function printInvoice(Orders $orders)
+    public function printInvoice( )
     {
         //todo
         // downloads file with invoice
@@ -88,41 +92,61 @@ class AdminController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function addobject(Request $request)
+    public function addobject(Request $request )
     {
+
+
         $entityManager = $this->getDoctrine()->getManager();
+        $uploads_directory=$this->getParameter('uploads_directory');
 
         $name = $request->get('object_name');
         $printtime = $request->get('object_printtime');
         $size = $request->get('object_size');
-        // todo find substr after word file, push to array
-        $files = $request->get('object_files');
-        $images = $request->get('object_images');
-        $prices = $request->get('object_prices');
-
+        $price = $request->get('object_price');
+        $files = $request->files->all()['object_files'];
+        $images = $request->files->all()['object_images'];
 
         $object = new Printedobject();
-
 
         $object->setName($name);
         $object->setPrintTime($printtime);
         $object->setSize($size);
+        //$object->setGCODE($price);
 
         foreach ($files as $file) {
             $newFiles = new Files();
-            $filledFiles = $newFiles->setGCODE($file);
-            $object->addFile($filledFiles);
+            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $filename = md5(uniqid()).'.'.$file->guessExtension();
+            $file->move($uploads_directory, $filename);
+            $newFiles->setGCODE('Change to Path file');
+            $newFiles->setName($originalFilename);
+            $object->addFile($newFiles);
+            $entityManager->persist($newFiles);
+        }
+        foreach ($images as $image) {
+            $newImage = new Images();
+            $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $imagefilename = md5(uniqid()).'.'.$image->guessExtension();
+            $image->move($uploads_directory, $imagefilename);
+            $newImage->setPath($imagefilename);
+            $newImage->setName($originalFilename);
+            $object->addImage($newImage);
+            $entityManager->persist($newImage);
         }
 
         $entityManager->persist($object);
         $entityManager->flush();
+
+
         return new Response('Object added');
-        // todo redirect repsonse
+
+
     }
 
     /**
      * @Route( "/admin/deleteobject/{id}", requirements={"id" = "\d+"}, name="delete_object")
      * @param Request $request
+     * @param PrintedobjectRepository $repository
      * @return Response
      */
 
@@ -142,7 +166,6 @@ class AdminController extends AbstractController
      * @param PrintedobjectRepository $repository
      * @return Response
      */
-
 public function objectdetail (Request $request, PrintedobjectRepository $repository)
 {
     $id = $request->get('id');
