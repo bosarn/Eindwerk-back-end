@@ -6,6 +6,7 @@ namespace App;
 
 use App\Entity\Orders;
 
+use App\Entity\User;
 use phpDocumentor\Reflection\Type;
 use Symfony\Component\Security\Core\Security;
 
@@ -34,27 +35,42 @@ class OrderUserListener
         // fills in invoice with data of order
         if($user = $this->security->getUser())
         {
-             $orders->setUser($this->security->getUser());
+            $result = array();
+            $user = $this->security->getUser();
+             $orders->setUser($user);
+            // fill in user
+            array_push($result,
+            '---Invoice for : '.$user->getUsername().'---    /nl
+            /nl
+            /nl
+            /nl
+            Date ordered:'
+            .date_format($orders->getDate(),'d/m/y'),
+            $orders->getShippingAdress().
+            '/nl
+            /nl
+            /nl
+            Order: '
+            );
+             // Get order details, objects, prices
              $details = $orders->getDetails();
 
-         $result = array();
+
              foreach($details as $detail ) {
-                 $pongo = $detail->getQuantity();
-                 array_push($result,"Quantity:".$pongo);
-                 $bongo = $detail->getObjects()->getName();
-                 array_push($result,"Object:".$bongo);
-                 $preinvoice = $detail->getObjects()->getPrice();
 
-                 foreach($preinvoice as $invoice){
-                     $bingo = $invoice->getValue();
-                     array_push($result,"Prices:".$bingo);
-                 }
+                 $objectDetail = $detail->getQuantity();
+                 $price = $detail->getObjects()->getPrice()->first();
+                 $objectName = $detail->getObjects()->getName();
+
+                 array_push($result,"Object:".$objectName);
+                 array_push($result,"Quantity:".$objectDetail);
+                 array_push($result,"Prices:".$price->getValue().'<hr>');
+
              }
-            $resultyes = implode(" ",$result);
+            $finalInvoice = implode(" ",$result);
 
-            $orders->setInvoice($resultyes);
+            $orders->setInvoice($finalInvoice);
         }
-        // TODO Fill in Invoice
 
     }
 

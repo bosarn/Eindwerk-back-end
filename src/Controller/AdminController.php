@@ -87,7 +87,7 @@ class AdminController extends AbstractController
 
         $disposition = HeaderUtils::makeDisposition(
             HeaderUtils::DISPOSITION_ATTACHMENT,
-            'Invoice-'.$orderId.'.txt'
+            'Invoice-'.$orderId.'.pdf'
         );
         $response->headers->set('Content-Disposition', $disposition);
         $response->send();
