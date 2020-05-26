@@ -1,0 +1,107 @@
+li{        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+
+
+}
+nav ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+}
+
+nav li {
+        float: left;
+}
+
+nav li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+nav li a:hover {
+        background-color: #111;
+}
+/* Add a gray right border to all list items, except the last item (last-child) */
+nav li {
+        border-right: 1px solid #bbb;
+}
+
+nav li:last-child {
+        border-right: none;
+}
+
+.box{
+        display: block;
+        border: 1px solid #ccc;
+        margin: 5px;
+        width: 300px;
+
+}
+.box:hover{
+        border: 1px solid #777;
+}
+.container{
+        display: flex;
+        padding: 20px;
+        flex-flow: wrap;
+}
+.form{
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+        margin: 0 auto;
+}
+.form{
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+        margin: 0 auto;
+}
+
+.bonger{
+        display: flex;
+        justify-content: space-between;
+        height: 30px;
+}
+.bonger form {
+        width: 50%;
+
+}
+.bonger form input{
+        width: 100%;
+        height: 100%;
+        background: #aa1111;
+        color: white;
+}
+.bonger  a{
+        text-decoration: none;
+        display: block;
+        width: 50%;
+        height: 100%;
+        background: #0d5aa7;
+        color: white;
+        text-align: center;
+        line-height: 30px;
+
+}
+.banger h3 {
+        margin: 0 0 3px 0;
+        background: #3B5998;
+        color: white;
+        text-align: center;
+}
+.banger img{
+        width: 99%;
+        height: 240px;
+        object-fit: fill;
+        border-radius: 10px;
+
+}

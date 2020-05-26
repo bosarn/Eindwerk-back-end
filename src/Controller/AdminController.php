@@ -16,6 +16,7 @@ use App\Entity\Orders;
 use App\Entity\Printedobject;
 use App\Repository\PrinterRepository;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
@@ -57,32 +58,49 @@ class AdminController extends AbstractController
 
         // todo get printer via api calls call for status -> adjust db status
         $printers =$printer->findAll();
+        // setstatus == api called data
         $orders = $repository->findBy(
             array('status'=> 'test'),
             array('date' => 'DESC')
         );
 
-
         return $this->render('admin/orders.html.twig', ['orders' => $orders,'printers'=> $printers]);
     }
 
     /**
-     * @Route( "/admin/printinvoice/{id}", requirements={"id" = "\d+"}, name="download_invoice")
-     *
+     * @Route( "/admin/download-invoice/{id}", requirements={"id" = "\d+"}, name="download_invoice")
+     * @param Request $request
+     * @param OrdersRepository $repository
+     * @return RedirectResponse
      */
-    public function downloadinvoice( )
+    public function downloadinvoice(Request $request, OrdersRepository $repository )
     {
-        //todo
-        // downloads file with invoice
-        // sets order status to complete
-        // redirects @return RedirectResponse
 
+        $orderId = $request->request->get('order_id');
+        $order = $repository->findOneBy(['id'=> $orderId]);
+        $order->setStatus('Finished');
+        $invoice = $order->getInvoice();
+
+
+        $fileContent =  $invoice;
+        $response = new Response($fileContent);
+
+        $disposition = HeaderUtils::makeDisposition(
+            HeaderUtils::DISPOSITION_ATTACHMENT,
+            'Invoice-'.$orderId.'.txt'
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->send();
+
+        return $this->redirect('/admin/orders');
     }
 
     /**
      * @Route( "/admin/sendfiletoprinter", name="send_file_to_printer")
      * @param Request $request
-     * @return void
+     * @param PrinterRepository $printerrepository
+     * @param FilesRepository $filesRepository
+     * @return RedirectResponse
      */
 
     public function sendFileToPrinter(Request $request, PrinterRepository $printerrepository, FilesRepository $filesRepository)
@@ -104,7 +122,7 @@ class AdminController extends AbstractController
         // printer status -> closed
         // redirects@return RedirectResponse
         // requirements={"id" = "\d+"}
-
+        return $this->redirect('/admin/orders');
 
     }
 
@@ -138,8 +156,9 @@ class AdminController extends AbstractController
             $newFiles = new Files();
             $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $filename = md5(uniqid()).'.'.$file->guessExtension();
+
+            $newFiles->setGCODE(file_get_contents($file));
             $file->move($uploads_directory.'/files/', $filename);
-            $newFiles->setGCODE('/uploads/files/'.$filename);
             $newFiles->setName($originalFilename);
             $object->addFile($newFiles);
             $entityManager->persist($newFiles);
@@ -195,9 +214,3 @@ public function objectdetail (Request $request, PrintedobjectRepository $reposit
     return $this->render('admin/objectdetails.html.twig', ['object' => $object]);
 }
 }
-/**
- *
-
-
-
- */

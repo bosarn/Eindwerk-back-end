@@ -2,14 +2,20 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}SUCCCESSS!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}3DPrintFarm{% endblock %}</title>
+        {% block stylesheets %}
+            <link rel="stylesheet"  href="{{ asset('css/main.css') }}" type="text/css" />
+        {% endblock %}
     </head>
     <body>
-    <nav><a href="{{ path('app_admin_objects') }}">Objects </a>
-        <a href="{{ path('app_admin_orders') }}">Orders </a>
-        <a href="/api">API</a>
-        <a href="{{ path('app_logout') }}">Logout</a>
+    <nav>
+        <ul>
+            <li><a href="{{ path('app_admin_objects') }}">Objects </a></li>
+            <li><a href="{{ path('app_admin_orders') }}">Orders </a></li>
+            <li><a href="/api">API</a></li>
+            <li><a href="{{ path('app_logout') }}">Logout</a></li>
+
+        </ul>
     </nav>
 
         {% block body %}{% endblock %}
