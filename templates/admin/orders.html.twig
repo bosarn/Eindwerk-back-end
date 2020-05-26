@@ -6,44 +6,54 @@
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <p>Email: {{ app.user.email }}</p>
             {% endif %}
-            <a href="/">Home</a>
+
 
         </div>
         <div>
+            Total orders: {{ orders | length }}
             {% for order in orders %}
+                {%if loop.index < 6  %}
             <ul>
                 Order {{ order.id }} | {{ order.date | date ('d/m/Y') }}
+                {{ order.status }}
+                {{ order.shippingAdress }}
 
                 <li> User Name: {{ order.user.name }}</li>
                 {% for object in order.Allobjects %}
 
-                <li>  Objectname: {{ object.name }}
+                <li>  Objectname: {{ object.name }}:
                     {% for detail in object.details %}
                         {% if  order.id == detail.orders.id %}
-                            : {{ detail.quantity }}
+                            {{ detail.quantity }}
                         {% endif %}
+                    {% endfor %} <!--Detail end-->
                 </li>
-                    {% endfor %}
+
                     Files:
                     {% for file in object.files %}
-
                         <li> {{ file.name }}</li>
-                        <form method="post" action="{{ path('send_file_to_printer') }}">
-                            <label for="src">
-                                Send to printer // make select options with argument of printers with status available
+                        <form method="post" action="{{ path('send_file_to_printer')}}">
+                            <label for="file_id">
+                                <input name="file_id" value="{{ file.id }}" hidden>
                             </label>
-                            <input type="text" name="src" id="src">
-                            <input type="submit">
+                            <label for="printer_select">
+                                Printer
+                                <select name="printer_select">
+                                    {% for printer in printers %}
+                                    <option name="printer_select"> {{ printer.id }}: {{ printer.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                            <input type="submit" value="Print">
                         </form>
-
-                    {% endfor %}
-
-                {% endfor %}
+                    {% endfor %} <!--File end-->
+                {% endfor %}<!--Object end-->
             </ul>
                 <li> Order invoice: {{ order.invoice }}</li>
-                <a href="{{ path('print_invoice', {'id': order.id }) }}">Print invoice </a>
+                <a href="{{ path('download_invoice', {'id': order.id }) }}">Print invoice </a>
                 <hr>
-        {% endfor %}
+                {% endif %}
+        {% endfor %} <!--Order end-->
 
         </div>
 

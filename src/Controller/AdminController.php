@@ -7,12 +7,14 @@ namespace App\Controller;
 use App\Entity\Images;
 use App\Entity\Printer;
 use App\Entity\Files;
+use App\Repository\FilesRepository;
 use App\Repository\OrdersRepository;
 use App\Repository\OrderDetailsRepository;
 use App\Repository\PrintedobjectRepository;
 use App\Entity\OrderDetails;
 use App\Entity\Orders;
 use App\Entity\Printedobject;
+use App\Repository\PrinterRepository;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -47,43 +49,62 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/orders", name="app_admin_orders")
      * @param OrdersRepository $repository
+     * @param PrinterRepository $printer
      * @return Response
      */
-    public function orders(OrdersRepository $repository )
+    public function orders(OrdersRepository $repository, PrinterRepository $printer)
     {
-        //todo: find all by date desc && status ordered not finished
-        $orders = $repository->findAll();
 
-        return $this->render('admin/orders.html.twig', ['orders' => $orders]);
+        // todo get printer via api calls call for status -> adjust db status
+        $printers =$printer->findAll();
+        $orders = $repository->findBy(
+            array('status'=> 'test'),
+            array('date' => 'DESC')
+        );
+
+
+        return $this->render('admin/orders.html.twig', ['orders' => $orders,'printers'=> $printers]);
     }
 
     /**
-     * @Route( "/admin/printinvoice/{id}", requirements={"id" = "\d+"}, name="print_invoice")
+     * @Route( "/admin/printinvoice/{id}", requirements={"id" = "\d+"}, name="download_invoice")
      *
      */
-    public function printInvoice( )
+    public function downloadinvoice( )
     {
         //todo
         // downloads file with invoice
         // sets order status to complete
         // redirects @return RedirectResponse
+
     }
 
     /**
-     * @Route( "/admin/sendfiletoprinter/{id}", requirements={"id" = "\d+"}, name="send_file_to_printer")
-     * @param $fil
-     * @param $printe
+     * @Route( "/admin/sendfiletoprinter", name="send_file_to_printer")
+     * @param Request $request
      * @return void
      */
 
-    public function sendFileToPrinter($fil, $printe)
+    public function sendFileToPrinter(Request $request, PrinterRepository $printerrepository, FilesRepository $filesRepository)
     {
+        $printerid = $request->get('printer_select');
+        $fileid = $request->get('file_id');
+
+        $file = $filesRepository->findOneBy(['id' => $fileid]);
+        $printer = $printerrepository->findOneBy(['id' => $printerid]);
+
+        $printer->getLocation();
+        $file->getGCODE();
+
         //todo
         // get printer id >> IP API key
         // does http post to pritner
+        // if resposne 200
         // adjust file to quantity minus 1
+        // printer status -> closed
         // redirects@return RedirectResponse
-        //Printer $printer, Files $files
+        // requirements={"id" = "\d+"}
+
 
     }
 
