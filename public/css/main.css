@@ -1,9 +1,14 @@
-li{        list-style-type: none;
+*{
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+}
+
+li{
+        list-style-type: none;
         margin: 0;
         padding: 0;
         overflow: hidden;
-
-
 }
 nav ul {
         list-style-type: none;
@@ -21,7 +26,7 @@ nav li a {
         display: block;
         color: white;
         text-align: center;
-        padding: 14px 16px;
+        padding: 20px 30px;
         text-decoration: none;
 }
 

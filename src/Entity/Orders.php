@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     denormalizationContext={"groups"={"order:write"}, "swagger_definition_name"="Write"},
  *     attributes={"security"="is_granted('ROLE_USER')"},
  *     collectionOperations={
- *         "get",
+ *         "get"={"security"="is_granted('ROLE_ADMIN')"},
  *         "post"={"security"="is_granted('ROLE_USER') ","security_message"="Sorry, log in first."},
  *     },
  *     itemOperations={

@@ -1,0 +1,62 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice 3DPrintFarm </title>
+</head>
+<body>
+
+<h1>Invoice 3DPrintFarm </h1>
+<hr>
+<strong>{{ order.date | date ('d/m/Y')}}</strong><p>order:{{ order.id }}</p>
+<br>
+<br>
+
+<h2>Name: </h2>
+<strong>{{ order.user.name }}</strong>
+<h2>Adress:</h2>
+<strong>{{ order.shippingadress }}</strong>
+<h3> Products: </h3>
+<table style="border: 1px solid black;">
+
+    <tr>
+{% for name in names %}
+    <td>
+    {{ name }}
+        </td>
+{% endfor %}
+    </tr>
+    <tr>
+{% for detail in details %}
+    <td>
+        {{ detail }}
+    </td>
+{% endfor %}
+    </tr>
+    <tr>
+{% for price in prices %}
+    <td>
+        ${{ price }}
+    </td>
+
+
+{% endfor %}
+    </tr>
+    <tr>
+        {% for i in 0..names|length-1 %}
+            <td>
+                ${{ details[i]*prices[i] }}
+            </td>
+        {% endfor %}
+    </tr>
+</table>
+Total:
+
+
+<br>
+<br>
+<hr>
+Copyright en alles, alles is gereserveerd.
+Ik zie eulle daar
+</body>
+</html>

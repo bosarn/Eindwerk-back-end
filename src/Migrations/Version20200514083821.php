@@ -19,33 +19,6 @@ final class Version20200514083821 extends AbstractMigration
 
     public function up(Schema $schema) : void
     {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
-        $this->addSql('ALTER TABLE object_category DROP FOREIGN KEY object_category_ibfk_2');
-        $this->addSql('ALTER TABLE files DROP FOREIGN KEY files_ibfk_1');
-        $this->addSql('ALTER TABLE images DROP FOREIGN KEY images_ibfk_1');
-        $this->addSql('ALTER TABLE object_category DROP FOREIGN KEY object_category_ibfk_1');
-        $this->addSql('ALTER TABLE order_details DROP FOREIGN KEY order_details_ibfk_2');
-        $this->addSql('ALTER TABLE prices DROP FOREIGN KEY prices_ibfk_1');
-        $this->addSql('ALTER TABLE order_details DROP FOREIGN KEY order_details_ibfk_1');
-        $this->addSql('ALTER TABLE printerprofile DROP FOREIGN KEY printerprofile_ibfk_1');
-        $this->addSql('ALTER TABLE orders DROP FOREIGN KEY orders_ibfk_1');
-        $this->addSql('ALTER TABLE printer DROP FOREIGN KEY printer_ibfk_1');
-        $this->addSql('ALTER TABLE printer DROP FOREIGN KEY printer_ibfk_2');
-        $this->addSql('DROP TABLE category');
-        $this->addSql('DROP TABLE files');
-        $this->addSql('DROP TABLE object');
-        $this->addSql('DROP TABLE object_category');
-        $this->addSql('DROP TABLE order_details');
-        $this->addSql('DROP TABLE orders');
-        $this->addSql('DROP TABLE postcodes');
-        $this->addSql('DROP TABLE prices');
-        $this->addSql('DROP TABLE printer');
-        $this->addSql('DROP TABLE printerprofile');
-        $this->addSql('DROP TABLE users');
-        $this->addSql('DROP INDEX img_obj_id ON images');
-        $this->addSql('ALTER TABLE images ADD id INT AUTO_INCREMENT NOT NULL, ADD name VARCHAR(255) DEFAULT NULL, ADD description VARCHAR(255) DEFAULT NULL, ADD path VARCHAR(255) NOT NULL, DROP img_id, DROP img_obj_id, DROP img_name, DROP img_beschrijving, DROP img_path, DROP PRIMARY KEY, ADD PRIMARY KEY (id)');
     }
 
     public function down(Schema $schema) : void

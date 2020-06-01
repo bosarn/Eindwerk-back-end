@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     normalizationContext={"groups"={"category:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"category:write"}, "swagger_definition_name"="Write"},
  *     collectionOperations={
- *         "get",
+ *         "get"={"security"="is_granted('ROLE_ADMIN')"},
  *         "post"={"security"="is_granted('ROLE_ADMIN')"},
  *     },
  *     itemOperations={

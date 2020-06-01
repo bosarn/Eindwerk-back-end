@@ -2,7 +2,7 @@
 
 
 namespace App\Controller;
-
+ini_set('display_errors',true);
 
 use App\Entity\Images;
 use App\Entity\Printer;
@@ -23,7 +23,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 
 class AdminController extends AbstractController
@@ -61,7 +62,7 @@ class AdminController extends AbstractController
         // setstatus == api called data
         $orders = $repository->findBy(
             array('status'=> 'test'),
-            array('date' => 'DESC')
+            array('date' => 'ASC')
         );
 
         return $this->render('admin/orders.html.twig', ['orders' => $orders,'printers'=> $printers]);
@@ -71,7 +72,7 @@ class AdminController extends AbstractController
      * @Route( "/admin/download-invoice/{id}", requirements={"id" = "\d+"}, name="download_invoice")
      * @param Request $request
      * @param OrdersRepository $repository
-     * @return RedirectResponse
+     * @return Response
      */
     public function downloadinvoice(Request $request, OrdersRepository $repository )
     {
@@ -79,20 +80,72 @@ class AdminController extends AbstractController
         $orderId = $request->request->get('order_id');
         $order = $repository->findOneBy(['id'=> $orderId]);
         $order->setStatus('Finished');
-        $invoice = $order->getInvoice();
+        //$invoice = $order->getInvoice();
+        $details = $order->getDetails();
+
+        $objectDetails = array();
+        $objectNames = array();
+        $objectprices = array();
+        foreach($details as $detail ) {
+
+            $objectDetail = $detail->getQuantity();
+            $price = $detail->getObjects()->getPrice();
+            $objectName = $detail->getObjects()->getName();
+
+            array_push($objectDetails, $objectDetail);
+            array_push($objectNames, $objectName);
+
+            foreach($price as $prices) {
+                array_push($objectprices, $prices->getValue());
+            }
+        }
+
+        $options = new Options();
+        $options->set('isRemoteEnabled', TRUE);
+        $dompdf = new Dompdf($options);
+
+        $context = stream_context_create([
+            'ssl' => [
+                'verify_peer' => FALSE,
+                'verify_peer_name' => FALSE,
+                'allow_self_signed'=> TRUE
+            ]
+        ]);
+        $dompdf->setHttpContext($context);
+
+        $html = $this->renderView('pdf.html.twig',[
+            'order' => $order,
+            'names' => $objectNames,
+            'details' => $objectDetails,
+            'prices' => $objectprices,
+
+        ]);
+
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+        $output = $dompdf->output();
+
+        return new Response($output, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' =>  'inline; filename="myfilename.pdf"',
+]);
 
 
-        $fileContent =  $invoice;
+
+        /**
+         *         $fileContent =  $invoice;
         $response = new Response($fileContent);
 
         $disposition = HeaderUtils::makeDisposition(
-            HeaderUtils::DISPOSITION_ATTACHMENT,
-            'Invoice-'.$orderId.'.pdf'
+        HeaderUtils::DISPOSITION_ATTACHMENT,
+        'Invoice-'.$orderId.'.pdf'
         );
         $response->headers->set('Content-Disposition', $disposition);
         $response->send();
+         */
 
-        return $this->redirect('/admin/orders');
+        //return $this->redirect('/admin/orders');
     }
 
     /**

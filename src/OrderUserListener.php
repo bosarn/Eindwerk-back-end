@@ -38,40 +38,44 @@ class OrderUserListener
             $result = array();
             $user = $this->security->getUser();
              $orders->setUser($user);
-            // fill in user
-            array_push($result,
-            '---Invoice for : '.$user->getUsername().'---    /nl
-            /nl
-            /nl
-            /nl
-            Date ordered:'
-            .date_format($orders->getDate(),'d/m/y'),
-            $orders->getShippingAdress().
-            '/nl
-            /nl
-            /nl
-            Order: '
-            );
-             // Get order details, objects, prices
-             $details = $orders->getDetails();
 
-
-             foreach($details as $detail ) {
-
-                 $objectDetail = $detail->getQuantity();
-                 $price = $detail->getObjects()->getPrice()->first();
-                 $objectName = $detail->getObjects()->getName();
-
-                 array_push($result,"Object:".$objectName);
-                 array_push($result,"Quantity:".$objectDetail);
-                 array_push($result,"Prices:".$price->getValue().'<hr>');
-
-             }
-            $finalInvoice = implode(" ",$result);
-
-            $orders->setInvoice($finalInvoice);
         }
 
     }
 
 }
+/**
+ *             // fill in user
+array_push($result,
+'---Invoice for : '.$user->getUsername().'---    /nl
+/nl
+/nl
+/nl
+Date ordered:'
+.date_format($orders->getDate(),'d/m/y'),
+$orders->getShippingAdress().
+'/nl
+/nl
+/nl
+Order: '
+);
+// Get order details, objects, prices
+$details = $orders->getDetails();
+
+
+foreach($details as $detail ) {
+
+$objectDetail = $detail->getQuantity();
+$price = $detail->getObjects()->getPrice();
+$objectName = $detail->getObjects()->getName();
+
+array_push($result,"Object:                            ".$objectName."/nl");
+array_push($result,"Quantity:                          ".$objectDetail."/nl");
+foreach($price as $prices) {
+array_push($result, "Prices:" . $prices->getValue()."/nl");
+}
+}
+$finalInvoice = implode(" ",$result);
+
+$orders->setInvoice($finalInvoice);
+ */

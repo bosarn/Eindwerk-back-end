@@ -50,12 +50,10 @@ class Images
      * @Groups({"object:read","object:write", "order:write","image:write","detail:write"})
      */
     private $path;
-
     /**
      * @ORM\ManyToOne(targetEntity=Printedobject::class, inversedBy="images",cascade={"persist"})
      */
     private $printedobjects;
-
 
     public function getId(): ?int
     {

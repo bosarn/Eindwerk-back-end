@@ -27,7 +27,7 @@ final class Version20200514093300 extends AbstractMigration
         $this->addSql('CREATE TABLE orders (id INT AUTO_INCREMENT NOT NULL, description VARCHAR(255) NOT NULL, status VARCHAR(255) NOT NULL, date DATE DEFAULT NULL, shipping_adress VARCHAR(255) NOT NULL, invoice LONGTEXT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE printedobject (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, print_time INT NOT NULL, price INT NOT NULL, size INT DEFAULT NULL, gcode VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE printer (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, location VARCHAR(255) NOT NULL, status VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE printer_profile (id INT AUTO_INCREMENT NOT NULL, settings JSON DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE printer_profile (id INT AUTO_INCREMENT NOT NULL, settings VARCHAR(2000) NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
     }
 
     public function down(Schema $schema) : void
