@@ -1,2 +1,6 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+
+# live asset base
+    globals:
+        asset_base: 'https://wdev.be/wdev_arno/eindwerk'

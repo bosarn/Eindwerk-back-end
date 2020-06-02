@@ -14,7 +14,7 @@
                         <h3>{{ object.Name }} </h3>
                         {% for image in object.Images %}
                             {% if loop.first %}
-                                <img src="{{ image.path }}" alt="object_image">
+                                <img src="{{ asset_base }}{{ asset(image.path) }}" alt="object_image">
                             {% endif %}
                         {% endfor %}
                         <p>Time to print: {{ object.PrintTime }}</p>
