@@ -32,7 +32,7 @@ class OrderUserListener
             return;
         }
         // listener catches validation of user
-        // fills in invoice with data of order
+
         if($user = $this->security->getUser())
         {
             $result = array();

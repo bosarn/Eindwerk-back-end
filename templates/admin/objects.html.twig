@@ -7,6 +7,7 @@
                 <p>Email: {{ app.user.email }}</p>
             {% endif %}
     <div class="container">
+
             {% for object in objects %}
 
                     <div class="box">
@@ -15,6 +16,7 @@
                         {% for image in object.Images %}
                             {% if loop.first %}
                                 <img src="{{ asset_base }}{{ asset(image.path) }}" alt="object_image">
+
                             {% endif %}
                         {% endfor %}
                         <p>Time to print: {{ object.PrintTime }}</p>

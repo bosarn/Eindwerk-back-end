@@ -3,4 +3,6 @@ twig:
 
 # live asset base
     globals:
-        asset_base: 'https://wdev.be/wdev_arno/eindwerk'
+        asset_base: '/wdev_arno/eindwerk/system/public'
+
+        #https://wdev.be

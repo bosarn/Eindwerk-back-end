@@ -175,7 +175,7 @@ class AdminController extends AbstractController
         // printer status -> closed
         // redirects@return RedirectResponse
         // requirements={"id" = "\d+"}
-        return $this->redirect('/admin/orders');
+        return $this->redirectToRoute('app_admin_orders');
 
     }
 
@@ -230,7 +230,7 @@ class AdminController extends AbstractController
         $entityManager->persist($object);
         $entityManager->flush();
 
-        return $this->redirect('/admin/objects');
+        return $this->redirectToRoute('app_admin_objects');
 
 
 
@@ -250,7 +250,7 @@ class AdminController extends AbstractController
         $object = $repository->findOneBy(['id' => $id]);
         $em->remove($object);
         $em->flush();
-        return $this->redirect('/admin/objects');
+        return $this->redirectToRoute('app_admin_objects');
     }
 
     /**
