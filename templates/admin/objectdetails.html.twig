@@ -3,64 +3,94 @@
 {% block body %}
     <div class="container">
         <div class="row">
-            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                <p>Email: {{ app.user.email }}</p>
-            {% endif %}
+            <div class="col ">
+                <div class="card mt-5">
+                <div class="card-header bg-primary text-light"> object-detail</div>
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-4" >Object: {{ object.id}}</h3>
+                        <form  action="{{ path('edit_object',{ 'id': object.id  }) }}">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
 
-            <h1> Object: {{ object.id}}</h1>
-<label for="object_name">
-    Name:
-    <input type="text" name="object_name" value="{{ object.name }}">
-</label>
-            <label for="object_printtime">
-                printtime:
-                <input type="text" name="object_printtime" value="{{ object.PrintTime }}">
-            </label>
-            <label for="object_size">
-                Size:
-                <input type="text" name="object_size" value="{{ object.size }}">
-            </label>
-            <br>
-            <h2>Images</h2>
-            {% for image in object.Images %}
+                                    <label for="object_name">
+                                        Name:
+                                        <input type="text" name="object_name" placeholder="{{ object.name }}">
+                                    </label>
 
-                <label for="image_name">
-                    Image name
-                    <input type="text" name="object_name" value="{{ image.name }}">
-                </label>
-                <label for="image_path">
-                    Image Path
-                    <input type="text" name="object_name" value="{{ image.path }}">
-                </label>
-                <img src="{{ image.path }}" alt="{{ image.name }}" width="100" height="100">
-                <br>
-            {% endfor %}
-            <br>
-            <h2>Files</h2>
-            {% for file in object.files %}
+                                    <label for="object_printtime">
+                                        printtime:
+                                        <input type="text" name="object_printtime" placeholder="{{ object.PrintTime }}">
+                                    </label>
 
-                <label for="image_name">
-                    file name
-                    <input type="text" name="object_name" value="{{ file.name }}">
-                </label>
+                                <label for="object_size">
+                                    Size:
+                                    <input type="text" name="object_size" placeholder="{{ object.size }}">
+                                </label>
+                            </li>
 
-    <br>
-            {% endfor %}
-            <h2>Prices</h2>
-            {% for price in object.price %}
+                            <li class="list-group-item">
+                                <h4>Images</h4>
+                                {% for image in object.Images %}
 
-                <label for="image_name">
-                    price name
-                    <input type="text" name="object_name" value="{{ price.value }}">
-                </label>
+                                    <label for="object_image">
+                                        Image name
+                                        <input type="text" name="object_image" placeholder="{{ image.name }}">
+                                    </label>
 
+                                    <label for="image_path">
+                                        Image Path
+                                        <input type="text" name="image_path" placeholder="{{ image.path }}">
+                                    </label>
+                                {% endfor %}
+                            </li>
 
-            {% endfor %}
+                            <li class="list-group-item">
+                                <h4>Files</h4>
+                                {% for file in object.files %}
 
+                                    <label for="object_file">
+                                        file name
+                                        <input type="text" name="object_file" placeholder="{{ file.name }}">
+                                    </label>
+                                {% endfor %}
+                            </li>
 
+                            <li class="list-group-item">
+                                <h4 class="">Prices</h4>
+                                    <label for="object_price">
+                                        price
+                                        <input type="text" name="object_price" placeholder="{{ object.getCurrentPriceValue }}">
+                                        <input type="date" name="object_price_start" >
+                                    </label>
+                            </li>
 
+                            <li class="list-group-item">
+                                <div class="row ml-5 mt-4">
+                                    <div class="card-link">
+                                        <button type="submit" class="btn btn-primary" > Edit</button>
+                                    </div>
 
+                                    <form class="card-link" action="{{ path('delete_object',{ 'id':  object.id  })  }}">
+                                        <button type="submit" class="btn btn-danger" > delete</button>
+                                    </form>
+
+                                </div>
+                            </li>
+                        </ul>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="media">
+                    <div class="row no-gutters">
+                {% for image in object.Images %}
+                    <img src="{{ image.path }}" class="img-fluid img-thumbnail" style="object-fit: cover" alt="{{ image.name }}" >
+                {% endfor %}
+                </div>
+                </div>
             <a href="/">Home</a>
+            </div>
         </div>
     </div>
+
 {% endblock %}

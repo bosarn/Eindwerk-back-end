@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     denormalizationContext={"groups"={"price:write"}, "swagger_definition_name"="Write"},
  *     collectionOperations={
  *         "get"={"security"="is_granted('ROLE_ADMIN')"},
- *         "post"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "post"={},
  *     },
  *     itemOperations={
  *         "get"={"security"="is_granted('ROLE_ADMIN')"},
@@ -35,7 +35,7 @@ class Price
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"order:read","object:read","object:write", "order:write"})
+     * @Groups({"order:read","object:read","object:write", "detail:write","order:write","price:write"})
      */
     private $value;
 
@@ -46,12 +46,30 @@ class Price
     private $description;
 
     /**
+     *
      * @ORM\ManyToOne(targetEntity=Printedobject::class, inversedBy="Price")
      * @ORM\JoinColumn(nullable=false)
      */
     private $Printedobject;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     *
+     */
+    private $pricestart;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $priceend;
+
+    public function __construct()
+    {
+
+        $this->pricestart = new\DateTimeImmutable();
+
+
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +107,23 @@ class Price
     public function setPrintedobject(?Printedobject $Printedobject): self
     {
         $this->Printedobject = $Printedobject;
+
+        return $this;
+    }
+
+    public function getPricestart(): ?\DateTimeInterface
+    {
+        return $this->pricestart;
+    }
+
+    public function getPriceend(): ?\DateTimeInterface
+    {
+        return $this->priceend;
+    }
+
+    public function setPriceend( $priceend): self
+    {
+        $this->priceend = $priceend;
 
         return $this;
     }

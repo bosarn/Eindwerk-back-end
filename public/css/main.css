@@ -1,5 +1,11 @@
-*{
-        box-sizing: border-box;
+/**
+
+ *
+
+
+
+
+*{     box-sizing: border-box;
         margin: 0;
         padding: 0;
 }
@@ -30,11 +36,11 @@ nav li a {
         text-decoration: none;
 }
 
-/* Change the link color to #111 (black) on hover */
+
 nav li a:hover {
         background-color: #111;
 }
-/* Add a gray right border to all list items, except the last item (last-child) */
+
 nav li {
         border-right: 1px solid #bbb;
 }

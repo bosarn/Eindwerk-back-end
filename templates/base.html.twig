@@ -2,24 +2,43 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>{% block title %}3DPrintFarm{% endblock %}</title>
         {% block stylesheets %}
             <link rel="stylesheet"  href="{{ asset('css/main.css') }}" type="text/css" />
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         {% endblock %}
     </head>
     <body>
-    <nav>
-        <ul>
-            <li><a href="{{ path('app_admin_objects') }}">Objects </a></li>
-            <li><a href="{{ path('app_admin_orders') }}">Orders </a></li>
-            <li><a href="/api">API</a></li>
-            <li><a href="{{ path('app_logout') }}">Logout</a></li>
 
-        </ul>
+
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">3DprintAdmin</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="{{ path('app_admin_objects') }}">Objects </a>
+                <a  class="nav-item nav-link" href="{{ path('app_object_form') }}">Add object </a>
+                <a  class="nav-item nav-link" href="{{ path('app_admin_orders') }}">Orders </a>
+                <a  class="nav-item nav-link" href="{{ path('app_order_form') }}">Add order </a>
+                <a class="nav-item nav-link" href="/api">API</a>
+                <a class="nav-item nav-link" href="{{ path('app_logout') }}">Logout</a>
+            </div>
+        </div>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <p class="text-light">Admin: {{ app.user.email }}</p>
+        {% endif %}
     </nav>
 
-        {% block body %}{% endblock %}
-    {% block main %}{% endblock %}
+        {% block body %}
+
+
+
+        {% endblock %}
+
+        {% block main %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
 </html>

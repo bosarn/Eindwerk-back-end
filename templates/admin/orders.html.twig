@@ -1,70 +1,96 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                <p>Email: {{ app.user.email }}</p>
-            {% endif %}
 
-        <h2>Total orders: {{ orders | length }}</h2>
-<div class="container">
+
+<div class="container-fluid">
+    <h2>Total orders: {{ orders | length }}</h2>
+    <div class="row">
         {% for printer in printers %}
-            <div class="box">
-
-                <h3>{{ printer.name }}</h3>
-                    Status: {{ printer.status }}
-                    Location: {{ printer.location }}
-                    {{ printer.id }}
-
+            <div class="col">
+    <div class="card">
+        <h3 class="card-header">{{ printer.name }}</h3>
+                    <div class="card-body">
+                    <ul class="list-unstyled list-group-horizontal  ">
+                        <li class="list-group-item">Status: {{ printer.status }}</li>
+                        <li class="list-group-item">Location: {{ printer.location }}</li>
+                        <li class="list-group-item">{{ printer.id }}</li>
+                    </ul>
+    </div>
+            </div>
             </div>
         {% endfor %}
+See 1 order at a time onclick order see order details
     </div>
-        <div class="container">
+    </div>
+    <div class="row">
             {% for order in orders %}
-                {%if loop.index < 6  %}
-            <ul>
-                <h3>Order {{ order.id }} | {{ order.date | date ('d/m/Y') }} </h3>
+                <div class="row mt-5 ml-5">
+                {%if loop.index <  6 %}
+                    <div class="card ">
+                            <div class="card-header bg-primary text-light">
+                                <h3 class="card-title">Order {{ order.id }}  {{ order.date | date ('d/m/Y') }} </h3>
+                                <div class="card-subtitle"> User : {{ order.user.name }}</div>
+                            </div>
+                        <div class="card-body">
 
-                <li> User Name: {{ order.user.name }}</li>
+
+
                 {% for object in order.Allobjects %}
-                <h3>Object:</h3>
-                <h4> {{ object.name }}
+                            <div class="col">
+                <h5 class="center"> {{ object.name }}
                     {% for detail in object.details %}
                         {% if  order.id == detail.orders.id %}
-                :  {{ detail.quantity }}</h4>
+                :  {{ detail.quantity }}</h5>
                         {% endif %}
                     {% endfor %} <!--Detail end-->
 
 
+                            <ul class="list-unstyled list-group list-group-flush">
 
                     {% for file in object.files %}
-                        <li> {{ file.name }}</li>
-                        <form method="post" action="{{ path('send_file_to_printer')}}">
+                        <li class="list-group-item">
+                        <form method="post" action="{{ path('send_file_to_printer')}}" class="justify-between">
+
                             <label for="file_id">
                                 <input name="file_id" value="{{ file.id }}" hidden>
                             </label>
                             <label for="printer_select">
-                                Printer
+                                {{file.name}}
                                 <select name="printer_select">
                                     {% for printer in printers %}
                                     <option name="printer_select"> {{ printer.id }}: {{ printer.name }}</option>
                                     {% endfor %}
                                 </select>
                             </label>
-                            <input type="submit" value="Print">
+                            <button type="submit" class="btn btn-info"> Print</button>
+
                         </form>
+                        </li>
+
                     {% endfor %} <!--File end-->
+                            </ul>
+
+
                 {% endfor %}<!--Object end-->
 
-                <form method="post" action="{{ path('download_invoice', {'id': order.id })}}">
-                    <label for="order_id">
-                        <input name="order_id" value="{{ order.id }}" hidden>
-                    </label>
-                    <input type="submit" value="Invoice">
-                </form>
-            </ul>
-                {% endif %}
-        {% endfor %} <!--Order end-->
+                        </div>
 
-        </div>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <form method="post" action="{{ path('download_invoice', {'id': order.id })}}">
+                                <label for="order_id">
+                                    <input name="order_id" value="{{ order.id }}" hidden>
+                                </label>
+                                <button type="submit" class="btn btn-default"> Invoice</button>
+                            </form>
+                        </div>
+                    </div>
+                    </div>
+                {% endif %}
+
+        {% endfor %} <!--Order end-->
+    </div>
+
 
 
 {% endblock %}

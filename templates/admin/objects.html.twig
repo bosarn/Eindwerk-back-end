@@ -1,63 +1,39 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
-
-            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                <p>Email: {{ app.user.email }}</p>
-            {% endif %}
     <div class="container">
+        <div class="input-group input-group-lg mt-5">
+            <div class="input-group-prepend">
+                <span class="input-group-text bg-primary text-light" id="inputGroup-sizing-lg">Search Objects</span>
+            </div>
+            <input class="form-control" type="search" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+        </div>
+        <div class="row">
             {% for object in objects %}
+                    <div class="col">
+                        <div class="card mt-2" style="width: 15rem;">
 
-                    <div class="box">
-                    <div class="banger">
-                        <h3>{{ object.Name }} </h3>
                         {% for image in object.Images %}
                             {% if loop.first %}
-                                <img src="{{ image.path }}" alt="object_image">
+                                <img class="card-img-top" src="{{ asset(image.path)}}" alt="object_image">
                             {% endif %}
                         {% endfor %}
-                        <p>Time to print: {{ object.PrintTime }}</p>
-                        <p>  Size: {{ object.Size }}</p>
-                        <p>    How many files: {{ object.files | length }}</p>
 
-                    </div>
-                        <div class="bonger">
-            <form action="{{ path('delete_object',{ 'id':  object.id  })  }}">
-                <input type="submit" value="Delete object">
-            </form>
-            <a href="{{ path('object_detail',{ 'id': object.id  }) }}">Details... </a>
+                            <h5 class="card-title text-center">{{ object.Name }} </h5>
+                            <div class="card-body">
+                        <p class="card-text" >
+                            Time to print: {{ object.PrintTime }}
+                            Price: {{ object.getCurrentPriceValue }}
+                            How many files: {{ object.files | length }}</p>
+                                <a class="card-link" href="{{ path('object_detail',{ 'id': object.id  }) }}"> Details...</a>
+                            </div>
+
+                        </div>
                         </div>
 
-        </div>
             {% endfor %}
+
+        </div>
     </div>
 
-
-        <form name="post" action="{{ path('add_object')  }}" method="POST" enctype="multipart/form-data" class="form">
-            <label for="object_name">
-                Objectname
-            </label>
-            <input type="text" id="object_name" name="object_name">
-            <label for="object_printtime">
-                Printtime
-            </label>
-            <input type="text" name="object_printtime" id="object_printtime">
-            <label for="object_size">
-                Size
-            </label>
-            <input type="text" name="object_size" id="object_size">
-
-            <label for="object_files">
-                Upload Files
-            </label>
-            <input type="file" name="object_files[]" id="object_files" multiple="multiple">
-
-            <label for="object_images">
-                Upload images
-            </label>
-            <input type="file" name="object_images[]" id="object_images" multiple="multiple">
-
-            <input type="submit" value="Save object">
-        </form>
 {% endblock %}

@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
-
+use Doctrine\Common\Collections\Criteria;
 
 
 /**
@@ -21,7 +21,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
  *     denormalizationContext={"groups"={"object:write"}, "swagger_definition_name"="Write"},
  *     collectionOperations={
  *         "get",
- *         "post"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "post"={},
  *     },
  *     itemOperations={
  *         "get",
@@ -46,7 +46,7 @@ class Printedobject
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255 , nullable=true)
      * @Groups({"object:read"})
      */
     private $name;
@@ -90,14 +90,14 @@ class Printedobject
     private $Files;
 
     /**
-     * @ORM\OneToMany(targetEntity=Images::class, mappedBy="printedobjects",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=Images::class, mappedBy="printedobjects",cascade={"persist"})
      * @Groups({"detail:read","object:read", "object:write"})
      *
      */
     private $images;
 
     /**
-     * @ORM\OneToMany(targetEntity=Price::class, mappedBy="Printedobject",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=Price::class, mappedBy="Printedobject",cascade={"persist"})
      *@Groups({"object:read","object:write"})
      */
     private $Price;
@@ -317,6 +317,31 @@ class Printedobject
 
         return $this;
     }
+public function getCurrentPrice() {
+
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->lte('pricestart', new \DateTime()))
+            -> orderBy( array('pricestart' => Criteria::DESC))
+            -> setMaxResults(1);
+        return $this->getPrice()->matching($criteria);
+}
+
+    /**
+     * @return string
+     * @Groups({"detail:read","object:read"})
+     */
+
+public function getCurrentPriceValue () {
+      $prices =  $this->getCurrentPrice();
+    $global = '';
+    foreach($prices as $price) {
+        $global = $price->getValue();
+    }
+    return $global;
+
+}
+
+
 
 
 }

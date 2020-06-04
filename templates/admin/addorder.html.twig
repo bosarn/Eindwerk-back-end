@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container-fluid mt-5">
+        <h2 class="d-flex justify-content-center"> Add order</h2>
+        <form name="post" action="{{ path('add_order')  }}" method="POST" enctype="multipart/form-data" class="container" >
+
+            <div class="form-group">
+                <label for="shipping_adress">
+                    shipping adress
+                </label>
+
+                <input type="text" id="shipping_adress" name="shipping_adress" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="user">
+                    user id
+                </label>
+                <input type="text" name="user" id="user" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="object_size">
+                    Objects
+                </label>
+                <input type="text" name="object_size" id="object_size" class="form-control">
+            </div>
+           Add objects with JS
+            dropdown menu with all objects + sign to add
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endblock %}
