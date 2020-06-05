@@ -56,10 +56,8 @@ class ViewRenderController extends AbstractController
      * @param PrinterRepository $printer
      * @return Response
      */
-
     public function orders(OrdersRepository $repository, PrinterRepository $printer)
     {
-
         // todo get printer via api calls call for status -> adjust db status
         $printers =$printer->findAll();
         // setstatus == api called data
@@ -67,7 +65,6 @@ class ViewRenderController extends AbstractController
             array('status'=> 'test'),
             array('date' => 'ASC')
         );
-
         return $this->render('admin/orders.html.twig', ['orders' => $orders,'printers'=> $printers]);
     }
     /**

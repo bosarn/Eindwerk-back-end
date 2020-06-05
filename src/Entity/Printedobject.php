@@ -31,7 +31,9 @@ use Doctrine\Common\Collections\Criteria;
  *     shortName="objects"
  * )
  * @ORM\Entity(repositoryClass=PrintedobjectRepository::class)
- * @ApiFilter( SearchFilter::class, properties={"name": "partial"}
+ * @ApiFilter( SearchFilter::class, properties={"name": "partial"},
+ *     RangeFilter::class , properties={"getCurrentPriceValue"},
+ *     BooleanFilter::class , properties={"published"}
  * )
  *
  */
@@ -64,11 +66,6 @@ class Printedobject
      */
     private $size;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"detail:read","object:read"})
-     */
-    private $GCODE;
 
     /**
      * @ORM\OneToMany(targetEntity=OrderDetails::class, mappedBy="objects")
@@ -101,6 +98,18 @@ class Printedobject
      *@Groups({"object:read","object:write"})
      */
     private $Price;
+
+    /**
+     * @ORM\Column(type="string", length=1200, nullable=true)
+     * @Groups({"object:read","object:write"})
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * @Groups({"object:read","object:write"})
+     */
+    private $published;
 
 
     public function __construct()
@@ -339,6 +348,30 @@ public function getCurrentPriceValue () {
     }
     return $global;
 
+}
+
+public function getDescription(): ?string
+{
+    return $this->description;
+}
+
+public function setDescription(?string $description): self
+{
+    $this->description = $description;
+
+    return $this;
+}
+
+public function getPublished(): ?bool
+{
+    return $this->published;
+}
+
+public function setPublished(?bool $published): self
+{
+    $this->published = $published;
+
+    return $this;
 }
 
 

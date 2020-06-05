@@ -6,52 +6,83 @@
 </head>
 <body>
 
-<h1>Invoice 3DPrintFarm </h1>
+
+<div style="background-color: lightslategray; width: 100%; height: 120px;">
+<h1 style="color: floralwhite" >Invoice 3DPrintFarm </h1>
+    <p style="margin-left: 80%; color: floralwhite;"> Company name adress and phone number</p>
+</div>
 <hr>
-<strong>{{ order.date | date ('d/m/Y')}}</strong><p>order:{{ order.id }}</p>
+<strong>{{ order.date | date ('d/m/Y')}}</strong><p>order:{{ orderid }}</p>
 <br>
 <br>
 
-<h2>Name: </h2>
-<strong>{{ order.user.name }}</strong>
-<h2>Adress:</h2>
-<strong>{{ order.shippingadress }}</strong>
-<h3> Products: </h3>
-<table style="border: 1px solid black;">
-
-    <tr>
-{% for name in names %}
-    <td>
-    {{ name }}
-        </td>
-{% endfor %}
-    </tr>
-    <tr>
-{% for detail in details %}
-    <td>
-        {{ detail }}
-    </td>
-{% endfor %}
-    </tr>
-    <tr>
-{% for price in prices %}
-    <td>
-        ${{ price }}
-    </td>
+    <h2>Name: </h2>
+    <strong>{{ order.user.name }}</strong>
+    <h2>Adress:</h2>
+    <strong>{{ order.shippingadress }}</strong>
+    <h3> Products: </h3>
 
 
-{% endfor %}
+
+
+<table style="border: 1px solid black; width: 100%;">
+    <tr style="border: 1px solid black; background: lightgrey">
+
+        <th>
+            Object Name:
+        </th>
+
+
+
+        <th>
+            Amount:
+        </th>
+
+
+        <th>
+            Price:
+        </th>
+
+
+        <th>
+            Subtotal:
+        </th>
+
     </tr>
+
+    {% for detail in details %}
+
+
     <tr>
-        {% for i in 0..names|length-1 %}
+
             <td>
-                ${{ details[i]*prices[i] }}
+                {{ detail.objects.name }}
             </td>
-        {% endfor %}
-    </tr>
-</table>
-Total:
 
+            <td>
+              X  {{ detail.quantity }}
+            </td>
+
+            <td>
+                ${{ detail.objects.getCurrentPriceValue }}
+            </td>
+
+
+            <td>
+                ${{ detail.quantity*detail.objects.getCurrentPriceValue }}
+            </td>
+
+    </tr>
+
+{% endfor %}
+</table>
+<strong> Total: </strong>
+
+{% for detail in details %}
+
+    {% set sum = detail.quantity*detail.objects.getCurrentPriceValue  + sum ?? 0 %}
+    {% if loop.last %} ${{ sum }}{% endif %}
+{% endfor %}
 
 <br>
 <br>

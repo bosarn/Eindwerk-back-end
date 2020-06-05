@@ -2,78 +2,76 @@
 {% block body %}
 
 
-<div class="container-fluid">
-    <h2>Total orders: {{ orders | length }}</h2>
-    <div class="row">
+    <div class="container-fluid">
+        <h2>Total orders: {{ orders | length }}</h2>
+        See 1 order at a time onclick order see order details
+        <div class="row">
         {% for printer in printers %}
             <div class="col">
-    <div class="card">
-        <h3 class="card-header">{{ printer.name }}</h3>
+                <div class="card">
+                    <h3 class="card-header">{{ printer.name }}</h3>
                     <div class="card-body">
-                    <ul class="list-unstyled list-group-horizontal  ">
-                        <li class="list-group-item">Status: {{ printer.status }}</li>
-                        <li class="list-group-item">Location: {{ printer.location }}</li>
-                        <li class="list-group-item">{{ printer.id }}</li>
-                    </ul>
-    </div>
-            </div>
+                        <ul class="list-unstyled list-group-horizontal">
+                            <li class="list-group-item">Status: {{ printer.status }}</li>
+                            <li class="list-group-item">Location: {{ printer.location }}</li>
+                            <li class="list-group-item">{{ printer.id }}</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         {% endfor %}
-See 1 order at a time onclick order see order details
+
+        </div>
     </div>
-    </div>
-    <div class="row">
+
             {% for order in orders %}
-                <div class="row mt-5 ml-5">
+                <div class="container-fluid">
                 {%if loop.index <  6 %}
-                    <div class="card ">
-                            <div class="card-header bg-primary text-light">
-                                <h3 class="card-title">Order {{ order.id }}  {{ order.date | date ('d/m/Y') }} </h3>
-                                <div class="card-subtitle"> User : {{ order.user.name }}</div>
-                            </div>
+                    <div class="card w-75 ml-auto mr-auto mt-5 row">
+                        <div class="card-header bg-primary text-light">
+                            <h3 class="card-title">Order {{ order.id }} {{ order.date | date ('d/m/Y') }}</h3>
+                            <div class="card-subtitle">User : {{ order.user.name }}</div>
+                        </div>
                         <div class="card-body">
 
 
 
                 {% for object in order.Allobjects %}
                             <div class="col">
-                <h5 class="center"> {{ object.name }}
-                    {% for detail in object.details %}
-                        {% if  order.id == detail.orders.id %}
-                :  {{ detail.quantity }}</h5>
-                        {% endif %}
-                    {% endfor %} <!--Detail end-->
+                                <h5 class="center">{{ object.name }}
+                                    {% for detail in object.details %}
+                                    {% if  order.id == detail.orders.id %}: {{ detail.quantity }}</h5>
+                                    {% endif %}
+                                {% endfor %} <!--Detail end-->
 
 
-                            <ul class="list-unstyled list-group list-group-flush">
-
+                                <ul class="list-unstyled list-group  list-group-horizontal-md">
                     {% for file in object.files %}
-                        <li class="list-group-item">
-                        <form method="post" action="{{ path('send_file_to_printer')}}" class="justify-between">
 
-                            <label for="file_id">
-                                <input name="file_id" value="{{ file.id }}" hidden>
-                            </label>
-                            <label for="printer_select">
-                                {{file.name}}
-                                <select name="printer_select">
-                                    {% for printer in printers %}
-                                    <option name="printer_select"> {{ printer.id }}: {{ printer.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </label>
-                            <button type="submit" class="btn btn-info"> Print</button>
-
-                        </form>
+                        <li class="list-group-item ">
+                            <form method="post" action="{{ path('send_file_to_printer')}}" class="justify-between">
+                                <label for="file_id">
+                                    <input name="file_id" value="{{ file.id }}" hidden />
+                                </label>
+                                <label for="printer_select">
+                                    {{file.name}}
+                                    <select name="printer_select">
+                                        {% for printer in printers %}
+                                        <option name="printer_select"> {{ printer.id }} : {{ printer.name }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                                <button type="submit" class="btn btn-info">Print</button>
+                            </form>
                         </li>
 
                     {% endfor %} <!--File end-->
-                            </ul>
-
+                                </ul>
+                            </div>
 
                 {% endfor %}<!--Object end-->
 
-                        </div>
+
 
                         </div>
                         <div class="card-footer text-muted">
@@ -89,7 +87,7 @@ See 1 order at a time onclick order see order details
                 {% endif %}
 
         {% endfor %} <!--Order end-->
-    </div>
+
 
 
 

@@ -38,12 +38,6 @@ class Orders
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"order:read","order:write","user:read"})
-     */
-    private $description;
-
-    /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"order:read", "order:write","user:read"})
      */
@@ -88,7 +82,7 @@ class Orders
     {
         $this->details = new ArrayCollection();
         $this->date = new\DateTimeImmutable();
-
+        $this->status= 'Received';
     }
 
 
@@ -112,13 +106,6 @@ class Orders
     public function getStatus(): ?string
     {
         return $this->status;
-    }
-
-    public function setStatus(string $status): self
-    {
-        $this->status = $status;
-
-        return $this;
     }
 
     public function getDate(): ?\DateTimeInterface

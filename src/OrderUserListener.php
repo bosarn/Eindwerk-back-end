@@ -5,12 +5,14 @@ namespace App;
 
 
 use App\Entity\Orders;
-
 use App\Entity\User;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use phpDocumentor\Reflection\Type;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Security;
 
-class OrderUserListener
+class OrderUserListener extends AbstractController
 {
     /**
      * @var Security
@@ -35,47 +37,45 @@ class OrderUserListener
         // fills in invoice with data of order
         if($user = $this->security->getUser())
         {
-            $result = array();
             $user = $this->security->getUser();
              $orders->setUser($user);
+            $uploads_directory=$this->getParameter('uploads_directory');
+            $details = $orders->getDetails();
+
+            $options = new Options();
+            $options->set('isRemoteEnabled', TRUE);
+            $dompdf = new Dompdf($options);
+
+            $context = stream_context_create([
+                'ssl' => [
+                    'verify_peer' => FALSE,
+                    'verify_peer_name' => FALSE,
+                    'allow_self_signed'=> TRUE
+                ]
+            ]);
+            $dompdf->setHttpContext($context);
+
+            $uniquestring = md5(uniqid());
+            $invoiceid = 'uploads/invoices/Invoice-order-'.$uniquestring.'.pdf' ;
+
+            $html = $this->renderView('pdf.html.twig',[
+                'order' => $orders,
+                'details' => $details,
+                'orderid' => $uniquestring
+            ]);
+
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+            $output = $dompdf->output();
+
+            // todo get id does not work for some reason, too bad! Change to uniqueid on construct?
+
+            file_put_contents($invoiceid, $output);
+            $orders->setInvoice($invoiceid);
 
         }
 
     }
 
 }
-/**
- *             // fill in user
-array_push($result,
-'---Invoice for : '.$user->getUsername().'---    /nl
-/nl
-/nl
-/nl
-Date ordered:'
-.date_format($orders->getDate(),'d/m/y'),
-$orders->getShippingAdress().
-'/nl
-/nl
-/nl
-Order: '
-);
-// Get order details, objects, prices
-$details = $orders->getDetails();
-
-
-foreach($details as $detail ) {
-
-$objectDetail = $detail->getQuantity();
-$price = $detail->getObjects()->getPrice();
-$objectName = $detail->getObjects()->getName();
-
-array_push($result,"Object:                            ".$objectName."/nl");
-array_push($result,"Quantity:                          ".$objectDetail."/nl");
-foreach($price as $prices) {
-array_push($result, "Prices:" . $prices->getValue()."/nl");
-}
-}
-$finalInvoice = implode(" ",$result);
-
-$orders->setInvoice($finalInvoice);
- */

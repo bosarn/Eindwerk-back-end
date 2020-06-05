@@ -38,60 +38,21 @@ class AdminOrderController extends AbstractController
      */
     public function downloadinvoice(Request $request, OrdersRepository $repository )
     {
-// TODO move to user order listener + enititymanager persist flush
+        $entityManager = $this->getDoctrine()->getManager();
+
         $orderId = $request->request->get('order_id');
         $order = $repository->findOneBy(['id'=> $orderId]);
         $order->setStatus('Finished');
+        $orderinvoicepath = $order->getInvoice();
 
-        //$invoice = $order->getInvoice();
-        $details = $order->getDetails();
+        $url = $orderinvoicepath;
+        $content = file_get_contents($url);
+        $entityManager->persist($order);
+        $entityManager->flush();
 
-        $objectDetails = array();
-        $objectNames = array();
-        $objectprices = array();
-        foreach($details as $detail ) {
-
-            $objectDetail = $detail->getQuantity();
-            $price = $detail->getObjects()->getPrice();
-            $objectName = $detail->getObjects()->getName();
-
-            array_push($objectDetails, $objectDetail);
-            array_push($objectNames, $objectName);
-
-            foreach($price as $prices) {
-                array_push($objectprices, $prices->getValue());
-            }
-        }
-
-        $options = new Options();
-        $options->set('isRemoteEnabled', TRUE);
-        $dompdf = new Dompdf($options);
-
-        $context = stream_context_create([
-            'ssl' => [
-                'verify_peer' => FALSE,
-                'verify_peer_name' => FALSE,
-                'allow_self_signed'=> TRUE
-            ]
-        ]);
-        $dompdf->setHttpContext($context);
-
-        $html = $this->renderView('pdf.html.twig',[
-            'order' => $order,
-            'names' => $objectNames,
-            'details' => $objectDetails,
-            'prices' => $objectprices,
-
-        ]);
-
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-        $dompdf->render();
-        $output = $dompdf->output();
-
-        return new Response($output, 200, [
+        return new Response($content, 200, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' =>  'inline; filename="myfilename.pdf"',
+            'Content-Disposition' =>  'inline; filename="invoice.pdf"',
         ]);
 
 
