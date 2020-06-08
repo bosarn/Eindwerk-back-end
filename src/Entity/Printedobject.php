@@ -31,10 +31,10 @@ use Doctrine\Common\Collections\Criteria;
  *     shortName="objects"
  * )
  * @ORM\Entity(repositoryClass=PrintedobjectRepository::class)
- * @ApiFilter( SearchFilter::class, properties={"name": "partial"},
- *     RangeFilter::class , properties={"getCurrentPriceValue"},
- *     BooleanFilter::class , properties={"published"}
- * )
+ * @ApiFilter( SearchFilter::class, properties={"name": "partial"}),
+ *     (RangeFilter::class , properties={"getCurrentPriceValue"}),
+ *     (BooleanFilter::class , properties={"published"})
+ *
  *
  */
 

@@ -4,12 +4,14 @@
     "require": {
         "php": "^7.2.5",
         "ext-ctype": "*",
+        "ext-dom": "*",
         "ext-iconv": "*",
         "ext-json": "*",
         "api-platform/api-pack": "^1.2",
         "doctrine/doctrine-migrations-bundle": "^2.1",
         "dompdf/dompdf": "^0.8.5",
         "lexik/jwt-authentication-bundle": "^2.6",
+        "limenius/react-bundle": "^5.0",
         "symfony/asset": "5.0.*",
         "symfony/console": "5.0.*",
         "symfony/dotenv": "5.0.*",
@@ -19,8 +21,8 @@
         "symfony/http-client": "5.0.*",
         "symfony/inflector": "5.0.*",
         "symfony/maker-bundle": "^1.17",
-        "symfony/yaml": "5.0.*",
-      "ext-dom": "*"
+        "symfony/webpack-encore-bundle": "^1.7",
+        "symfony/yaml": "5.0.*"
     },
     "require-dev": {
         "symfony/profiler-pack": "^1.0"

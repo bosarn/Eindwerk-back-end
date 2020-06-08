@@ -5,20 +5,35 @@ namespace App\Controller;
 use App\Repository\OrdersRepository;
 use App\Repository\PrintedobjectRepository;
 use App\Repository\PrinterRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class ViewRenderController extends AbstractController
 {
+
     /**
      * @Route("/", name="app_homepage")
+     * @param PrinterRepository $repository
      * @return Response
      */
-    public function homepage ()
+    public function homepage ( PrinterRepository $repository)
     {
-        return $this->render('homepage.html.twig');
+        $encoders = array(new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $printers = $repository->findAll();
+        return $this->render('homepage.html.twig', [
+            'printers' => $printers,
+            'printers_serialized' => $serializer->serialize($printers, 'json'),
+
+        ]);
     }
 
     /**
