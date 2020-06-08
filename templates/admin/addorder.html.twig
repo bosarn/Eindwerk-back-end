@@ -17,16 +17,52 @@
                 </label>
                 <input type="text" name="user" id="user" class="form-control">
             </div>
-            <div class="form-group">
-                <label for="object_size">
-                    Objects
+            <div class="form-group" id="addafter">
+                <label for="object_select">
+                <select name="object_select[]" >
+                    {% for object in objects %}
+                        <option name="object_select[]"> {{ object.id}} : {{  object.name }} </option>
+                    {% endfor %}
+                </select>
+                <label for="object_amount">
+                    Amount:
                 </label>
-                <input type="text" name="object_size" id="object_size" class="form-control">
+                <input type="text" name="object_amount[]" multiple="multiple" id="object_amount" class="form-control" >
             </div>
            Add objects with JS
             dropdown menu with all objects + sign to add
-
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+
     </div>
+
+    <label>
+    <input id='addObject' onclick="addInput()" class="btn btn-primary" type="submit">
+</label>
+
+
+
+
+{% endblock %}
+
+{%  block javascripts %}
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+            crossorigin="anonymous"></script>
+
+<script>
+
+let count = 1;
+
+const addInput = () => {
+
+    $('#addafter').append(`<div><label for="object_select"><select name="object_select[${count}]">{% for object in objects %}<option name="object_select[${count}]"> {{ object.id }} : {{ object.name }} </option>{% endfor %}</select><label for="object_amount">Amount:</label><input type="text" name="object_amount[${count}]" id="object_amount" class="form-control"></div>`)
+
+    count+=1;
+
+};
+
+</script>
+
 {% endblock %}

@@ -14,10 +14,11 @@
     <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">3DprintAdmin</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon"/>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
+                <a class="nav-item nav-link" href="{{ path('app_homepage') }}">Home </a>
                 <a class="nav-item nav-link" href="{{ path('app_admin_objects') }}">Objects </a>
                 <a  class="nav-item nav-link" href="{{ path('app_object_form') }}">Add object </a>
                 <a  class="nav-item nav-link" href="{{ path('app_admin_orders') }}">Orders </a>
@@ -38,6 +39,11 @@
         {% endblock %}
 
         {% block main %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+            <script
+                    src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+                    integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+                    crossorigin="anonymous"></script>
+        {% endblock %}
     </body>
 </html>

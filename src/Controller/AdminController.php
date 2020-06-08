@@ -4,10 +4,12 @@
 namespace App\Controller;
 
 
+use App\Entity\Category;
 use App\Entity\Images;
 use App\Entity\Price;
 use App\Entity\Printer;
 use App\Entity\Files;
+use App\Repository\CategoryRepository;
 use App\Repository\FilesRepository;
 use App\Repository\OrdersRepository;
 use App\Repository\OrderDetailsRepository;
@@ -38,13 +40,13 @@ class AdminController extends AbstractController
     }
 
 
-
     /**
      * @Route("/admin/object/add", name="add_object")
      * @param Request $request
+     * @param CategoryRepository $categoryRepository
      * @return RedirectResponse
      */
-    public function addobject(Request $request )
+    public function addobject(Request $request, CategoryRepository $categoryRepository )
     {
         $entityManager = $this->getDoctrine()->getManager();
         $uploads_directory=$this->getParameter('uploads_directory');
@@ -55,6 +57,7 @@ class AdminController extends AbstractController
         $price = $request->get('object_price');
         $files = $request->files->all()['object_files'];
         $images = $request->files->all()['object_images'];
+        $categories = $request->get('object_Category');
 
         $object = new Printedobject();
 
@@ -64,9 +67,19 @@ class AdminController extends AbstractController
 
         $priceObject = new Price();
         $priceObject->setValue($price);
-        $priceObject->getDescription('initial price');
+        $priceObject->setDescription('initial price');
         $object->addPrice($priceObject);
         $entityManager->persist($priceObject);
+
+        foreach ( $categories as $category) {
+            if($category !== 'None...'){
+                $newobjectCategory = $categoryRepository->findOneBy(['name'=> $category]);
+                $newobjectCategory->addPrintedobject($object);
+                $entityManager->persist($newobjectCategory);
+            }
+
+
+        }
 
         foreach ($files as $file) {
             $newFiles = new Files();
@@ -97,6 +110,7 @@ class AdminController extends AbstractController
 
     }
 
+
     /**
      * @Route( "/admin/deleteobject/{id}", requirements={"id" = "\d+"}, name="delete_object")
      * @param Request $request
@@ -113,6 +127,8 @@ class AdminController extends AbstractController
         $em->flush();
         return $this->redirect('/admin/objects');
     }
+
+
 
     /**
      * @Route( "/admin/editobject/{id}", requirements={"id" = "\d+"}, name="edit_object")

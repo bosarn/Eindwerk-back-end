@@ -41,10 +41,42 @@
         </label>
         <input type="file" name="object_images[]" id="object_images" multiple="multiple" class="form-control">
     </div>
-
+    <div id="addafter">
+    <label for="object_Category">
+        <select name="object_Category[]" >
+            <option name="object_Category[]">None...</option>
+            {% for category in categories %}
+                <option name="object_Category[]"> {{ category.name }} </option>
+            {% endfor %}
+        </select>
+    </div>
     <!-- TODO Add input for Categories <input name=Object_Categories[]>-->
 
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
     </div>
+
+    <input id='addObject' onclick="addInput()" class="btn btn-primary" type="submit">
+{% endblock %}
+
+{% block javascripts %}
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+            crossorigin="anonymous"></script>
+
+    <script>
+        let count = 1;
+        const addInput = () => {
+
+            $('#addafter').append(
+                `<select name="object_Category[]" >
+                {% for category in categories %}
+                <option name="object_Category[${count}]"> {{ category.name }} </option>
+                {% endfor %}
+                </select>`);
+            count+=1;
+
+        };
+    </script>
 {% endblock %}

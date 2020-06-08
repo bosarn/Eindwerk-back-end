@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use App\Repository\CategoryRepository;
 
 class ViewRenderController extends AbstractController
 {
@@ -38,20 +39,25 @@ class ViewRenderController extends AbstractController
 
     /**
      * @Route("/object/form", name="app_object_form")
+     * @param CategoryRepository $repository
      * @return Response
      */
-    public function objectform ()
+    public function objectform (CategoryRepository $repository )
     {
-        return $this->render('admin/addobject.html.twig');
+        $categories = $repository->findAll();
+
+        return $this->render('admin/addobject.html.twig',['categories' => $categories]);
     }
 
     /**
      * @Route("/order/form", name="app_order_form")
+     * @param PrintedobjectRepository $repository
      * @return Response
      */
-    public function orderform ()
+    public function orderform (PrintedobjectRepository $repository)
     {
-        return $this->render('admin/addorder.html.twig');
+        $objects = $repository->findAll();
+        return $this->render('admin/addorder.html.twig', ['objects' => $objects]);
     }
 
     /**

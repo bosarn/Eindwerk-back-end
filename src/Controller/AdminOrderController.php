@@ -16,6 +16,7 @@ use App\Entity\OrderDetails;
 use App\Entity\Orders;
 use App\Entity\Printedobject;
 use App\Repository\PrinterRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -93,53 +94,40 @@ class AdminOrderController extends AbstractController
      * @param Request $request
      * @return RedirectResponse
      */
-    public function addorder(Request $request )
+    public function addorder(Request $request, printedObjectRepository $repository, UserRepository $userRepository )
     {
         $entityManager = $this->getDoctrine()->getManager();
 
 
-        $name = $request->get('object_name');
-        $printtime = $request->get('object_printtime');
-        $size = $request->get('object_size');
-        $price = $request->get('object_price');
-        $files = $request->files->all()['object_files'];
-        $images = $request->files->all()['object_images'];
 
-        $object = new Printedobject();
+        $address = $request->get('shipping_adress');
+        $user = $request->get('user');
+        $objectID = $request->get('object_select');
+        $amount = $request->get('object_amount');
 
-        $object->setName($name);
-        $object->setPrintTime($printtime);
-        $object->setSize($size);
+        $order = new Orders();
 
-        $priceObject = new Price();
-        $priceObject->setValue($price);
-        $priceObject->getDescription('initial price');
-        $object->addPrice($priceObject);
-        $entityManager->persist($priceObject);
+        $userobject = $userRepository->findOneBy(['id'=> $user]);
+        $order->setUser($userobject);
+        $order->setShippingAdress($address);
 
-        foreach ($files as $file) {
-            $newFiles = new Files();
-            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-            $filename = md5(uniqid()).'.'.$file->guessExtension();
 
-            $newFiles->setGCODE(file_get_contents($file));
-            $file->move($uploads_directory.'/files/', $filename);
-            $newFiles->setName($originalFilename);
-            $object->addFile($newFiles);
-            $entityManager->persist($newFiles);
-        }
-        foreach ($images as $image) {
-            $newImage = new Images();
-            $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            $imagefilename = md5(uniqid()).'.'.$image->guessExtension();
-            $image->move($uploads_directory.'/images/', $imagefilename);
-            $newImage->setPath('/uploads/images/'.$imagefilename);
-            $newImage->setName($originalFilename);
-            $object->addImage($newImage);
-            $entityManager->persist($newImage);
-        }
 
-        $entityManager->persist($object);
+        $x=0;
+foreach( $objectID as $id){
+
+    $detail = new OrderDetails();
+    $object = $repository->findOneBy(['id'=> $id]);
+    $detail->setObjects($object);
+    $detail->setQuantity( $amount[$x]);
+    $detail->setObjectStatus('removestatusplease');
+    $order->addDetail($detail);
+   $x+=1;
+}
+
+
+
+        $entityManager->persist($order);
         $entityManager->flush();
 
         return $this->redirect('/admin/objects');

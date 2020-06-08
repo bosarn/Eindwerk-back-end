@@ -16,11 +16,14 @@
 
 {% block javascripts %}
 
-    <script type="text/javascript" src="system/assets/js/app.js">
-        console.log('hello Home');
+    <script type="text/javascript">
         var initialAppState = {{ printers_serialized | raw }} ;
-
     </script>
+
+
+        {{ encore_entry_script_tags("app") }}
+
+
 
 
 
