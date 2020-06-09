@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Repository\OrdersRepository;
 use App\Repository\PrintedobjectRepository;
 use App\Repository\PrinterRepository;
-use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -79,15 +78,20 @@ class ViewRenderController extends AbstractController
      */
     public function orders(OrdersRepository $repository, PrinterRepository $printer)
     {
-        // todo get printer via api calls call for status -> adjust db status
+        $encoders = array(new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
+
         $printers =$printer->findAll();
-        // setstatus == api called data
         $orders = $repository->findBy(
             array('status'=> 'test'),
             array('date' => 'ASC')
         );
-        return $this->render('admin/orders.html.twig', ['orders' => $orders,'printers'=> $printers]);
+        return $this->render('admin/orders.html.twig',
+                ['orders' => $orders,
+                'printers'=> $serializer->serialize($printers, 'json')]);
     }
+
     /**
      * @Route( "/admin/object/{id}", requirements={"id" = "\d+"}, name="object_detail")
      * @param Request $request

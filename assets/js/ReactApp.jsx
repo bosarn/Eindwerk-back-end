@@ -3,18 +3,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default () => {
-    // for each printer in array of objects do get
-    // render camera and data for each printer
-    //initialstate = printerdata state changes the object with correct ip or id
 
-console.log(initialAppState);
 
     const [printerdata, setPrinterdata] = useState('');
 
     const printergetter = () =>
         axios({
             method: "GET",
-            url: "https://192.168.0.134/api/printer",
+            url: "http://192.168.0.134/api/printer",
             headers: {
                 "X-Api-Key": "ECB47339A16F42D0BA8588ED4DD3603F",
             },
@@ -31,8 +27,8 @@ console.log(initialAppState);
 
     return (
         <>
-            <div>
-                <div className="container mt-5">
+            <div className="row">
+                <div className="col mt-5">
                     <div className="card">
                         <img
                             className="card-image-top"
@@ -41,6 +37,7 @@ console.log(initialAppState);
                             alt='Webcam disabled'
                             width="400"
                         />
+                        <div className='card-body'>
                         {printerdata ? (
                             <ul>
                                 <li>
@@ -62,7 +59,7 @@ console.log(initialAppState);
                         ) : (
                             "unavailable"
                         )}
-
+                        </div>
                     </div>
                 </div>
 

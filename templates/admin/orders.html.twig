@@ -1,31 +1,22 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 
-
-    <div class="container-fluid">
+    <div class="container">
         <h2>Total orders: {{ orders | length }}</h2>
+
         See 1 order at a time onclick order see order details
-        <div class="row">
-        {% for printer in printers %}
-            <div class="col">
-                <div class="card">
-                    <h3 class="card-header">{{ printer.name }}</h3>
-                    <div class="card-body">
-                        <ul class="list-unstyled list-group-horizontal">
-                            <li class="list-group-item">Status: {{ printer.status }}</li>
-                            <li class="list-group-item">Location: {{ printer.location }}</li>
-                            <li class="list-group-item">{{ printer.id }}</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
 
-        </div>
+        Redo in react, Get api called printers
+        Get orders from DB
+        Send file => axios post
+        on 200 set file amount +1
+        etc..
+        invoice button ?
+        <div id="root" class="row"></div>
     </div>
-
+    <div class="container-fluid">
             {% for order in orders %}
-                <div class="container-fluid">
+
                 {%if loop.index <  6 %}
                     <div class="card w-75 ml-auto mr-auto mt-5 row">
                         <div class="card-header bg-primary text-light">
@@ -46,32 +37,36 @@
 
 
                                 <ul class="list-unstyled list-group  list-group-horizontal-md">
-                    {% for file in object.files %}
 
+
+
+<!-- replace this shit Twig bullshit with react so we can actually do something in a website instead of bumping into errors and other bullshit
+Twig sucks so badly it can't even call a fucking function from inside a form to javascript it is so inept at what it does it can't even be called a tool-->
+
+                    {% for file in object.files %}
                         <li class="list-group-item ">
-                            <form method="post" action="{{ path('send_file_to_printer')}}" class="justify-between">
+                            <form method="post" class="justify-between formsubmit" id="formsubmit" >
                                 <label for="file_id">
-                                    <input name="file_id" value="{{ file.id }}" hidden />
+                                    <input name="file_name" id="file_name" value="{{ file.name }}" hidden />
                                 </label>
                                 <label for="printer_select">
                                     {{file.name}}
-                                    <select name="printer_select">
+                                    <select name="printer_select" id="printer_id">
                                         {% for printer in printers %}
-                                        <option name="printer_select"> {{ printer.id }} : {{ printer.name }} </option>
+                                            <option name="printer_id" id="printer_id"> {{ printer.id }} : {{ printer.name }} </option>
                                         {% endfor %}
                                     </select>
                                 </label>
-                                <button type="submit" class="btn btn-info">Print</button>
+                                <button type="submit" class="btn btn-default"> Send file</button>
                             </form>
                         </li>
+
 
                     {% endfor %} <!--File end-->
                                 </ul>
                             </div>
 
                 {% endfor %}<!--Object end-->
-
-
 
                         </div>
                         <div class="card-footer text-muted">
@@ -83,10 +78,45 @@
                             </form>
                         </div>
                     </div>
-                    </div>
+
                 {% endif %}
 
         {% endfor %} <!--Order end-->
+    </div>
+
+
+
+{% endblock %}
+{% block javascripts %}
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/assets/js/helper.js"></script>
+    <script type="module" >
+
+
+        document.querySelectorAll('.formsubmit').forEach( item =>
+            item.addEventListener( 'submit' ,
+                (e) => {
+                    e.preventDefault();
+                    console.log('test');
+                    const form = e.target;
+                    const file_name = form.querySelector('#file_name').value;
+                    const printer_id = form.querySelector('#printer_id').value;
+                    console.log(file_name, printer_id);
+                    axios(printer_id, file_name)
+                    sendFilesToPrinter();
+                    // send to other fucntion to deal with sending file
+                }
+            ));
+
+    </script>
+    <script type="text/javascript">
+        var initialAppState = {{ printers | raw }} ;
+    </script>
+
+    {{ encore_entry_script_tags("orders") }}
+
+
 
 
 

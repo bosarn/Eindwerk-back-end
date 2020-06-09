@@ -30,7 +30,14 @@ class Printer
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $status;
+    private $IP;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $APIkey;
+
+
 
     public function getId(): ?int
     {
@@ -61,15 +68,29 @@ class Printer
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getIP(): ?string
     {
-        return $this->status;
+        return $this->IP;
     }
 
-    public function setStatus(string $status): self
+    public function setIP(string $IP): self
     {
-        $this->status = $status;
+        $this->IP = $IP;
 
         return $this;
     }
+
+    public function getAPIkey(): ?string
+    {
+        return $this->APIkey;
+    }
+
+    public function setAPIkey(?string $APIkey): self
+    {
+        $this->APIkey = $APIkey;
+
+        return $this;
+    }
+
+
 }
