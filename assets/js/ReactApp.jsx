@@ -1,8 +1,19 @@
 import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+//import {ArgumentAxis, ValueAxis,  Chart,  LineSeries, from '@devexpress/dx-react-chart-material-ui';
+
+
+
+
 
 export default () => {
+
+    const data = [
+        { argument: 1, value: 10 },
+        { argument: 2, value: 20 },
+        { argument: 3, value: 30 },
+    ];
 
 
     const [printerdata, setPrinterdata] = useState('');
@@ -64,10 +75,22 @@ export default () => {
                 </div>
 
             </div>
+
+
         </>
     );
 
-
-
 };
-//        Printing? {printerdata.flags.printing ? <p>bingo</p> : ''}
+
+/*
+
+
+            <Chart
+                data={data}
+            >
+                <ArgumentAxis />
+                <ValueAxis />
+
+                <LineSeries valueField="value" argumentField="argument" />
+            </Chart>
+ */

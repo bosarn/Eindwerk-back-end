@@ -2,13 +2,15 @@
 
 {% block body %}
     <div class="container">
-        show publsihed or not
+        <form method="post"  id="formsubmit" action="{{ path('search_object') }}" >
         <div class="input-group input-group-lg mt-5">
             <div class="input-group-prepend">
-                <span class="input-group-text bg-primary text-light" id="inputGroup-sizing-lg">Search Objects</span>
+
+              <input  class="input-group-text bg-primary text-light" id="inputGroup-sizing-lg" value="Search object" type="submit">
             </div>
-            <input class="form-control" type="search" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+            <input name='search' class="form-control" type="search" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
         </div>
+        </form>
         <div class="row">
             {% for object in objects %}
                     <div class="col">
@@ -20,12 +22,15 @@
                             {% endif %}
                         {% endfor %}
 
-                            <h5 class="card-title text-center">{{ object.Name }} </h5>
+                            <h4 class="card-title text-center">{{ object.Name }} </h4>
                             <div class="card-body">
-                        <p class="card-text" >
-                            Time to print: {{ object.PrintTime }}
-                            Price: {{ object.getCurrentPriceValue }}
-                            How many files: {{ object.files | length }}</p>
+                        <ul class="card-text list-unstyled" >
+                            <li>Published : {{ object.published ? 'Yes': 'No' }} </li>
+                            <li>Time to print: {{ object.PrintTime }}</li>
+                            <li>Price: {{ object.getCurrentPriceValue }} </li>
+                            <li>How many files: {{ object.files | length }} </li>
+
+                        </ul>
                                 <a class="card-link" href="{{ path('object_detail',{ 'id': object.id  }) }}"> Details...</a>
                             </div>
 

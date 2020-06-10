@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Printedobject;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Printedobject|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,22 +20,32 @@ class PrintedobjectRepository extends ServiceEntityRepository
         parent::__construct($registry, Printedobject::class);
     }
 
-    // /**
-    //  * @return Printedobject[] Returns an array of Printedobject objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param $query
+     * @return Printedobject[] Returns an array of Printedobject objects
+     */
+
+    public function findBySearch($query)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+
+        $qb = $this-> createQueryBuilder( 'p');
+        $qb
+            -> where(
+                $qb->expr()->andX(
+                    $qb->expr()->orX(
+                        $qb->expr()->like('p.name', ':query'),
+                        $qb->expr()->like('p.description', ':query')
+                    )
+                )
+            )
+            ->setParameter('query', '%'.$query.'%');
+        return $qb
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
+
+
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Printedobject
@@ -44,6 +55,19 @@ class PrintedobjectRepository extends ServiceEntityRepository
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()
+        ;
+
+
+
+            return $this->createQueryBuilder('p')
+
+
+            ->andWhere('p.exampleField = :val')
+            ->setParameter('val', $value)
+            ->orderBy('p.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
         ;
     }
     */

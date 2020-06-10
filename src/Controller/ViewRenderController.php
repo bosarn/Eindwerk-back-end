@@ -89,7 +89,8 @@ class ViewRenderController extends AbstractController
         );
         return $this->render('admin/orders.html.twig',
                 ['orders' => $orders,
-                'printers'=> $serializer->serialize($printers, 'json')]);
+                    'printers' => $printers,
+                'printersserialized'=> $serializer->serialize($printers, 'json')]);
     }
 
     /**

@@ -26,6 +26,11 @@
                                     Size:
                                     <input type="text" name="object_size" placeholder="{{ object.size }}">
                                 </label>
+                                <label for="object_published">
+                                    Published:
+                                    <input type="checkbox" name="object_published"  {{ object.published ? 'checked' : '' }}>
+
+                                </label>
                             </li>
 
                             <li class="list-group-item">

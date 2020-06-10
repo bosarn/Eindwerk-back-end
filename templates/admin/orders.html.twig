@@ -53,7 +53,7 @@ Twig sucks so badly it can't even call a fucking function from inside a form to 
                                     {{file.name}}
                                     <select name="printer_select" id="printer_id">
                                         {% for printer in printers %}
-                                            <option name="printer_id" id="printer_id"> {{ printer.id }} : {{ printer.name }} </option>
+                                            <option name="printer_id" id="printer_id"> {{ printer.name }} : {{ printer.IP }} : {{ printer.APIkey }} </option>
                                         {% endfor %}
                                     </select>
                                 </label>
@@ -89,36 +89,12 @@ Twig sucks so badly it can't even call a fucking function from inside a form to 
 {% endblock %}
 {% block javascripts %}
 
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="/assets/js/helper.js"></script>
-    <script type="module" >
 
-
-        document.querySelectorAll('.formsubmit').forEach( item =>
-            item.addEventListener( 'submit' ,
-                (e) => {
-                    e.preventDefault();
-                    console.log('test');
-                    const form = e.target;
-                    const file_name = form.querySelector('#file_name').value;
-                    const printer_id = form.querySelector('#printer_id').value;
-                    console.log(file_name, printer_id);
-                    axios(printer_id, file_name)
-                    sendFilesToPrinter();
-                    // send to other fucntion to deal with sending file
-                }
-            ));
-
-    </script>
     <script type="text/javascript">
-        var initialAppState = {{ printers | raw }} ;
+        var initialAppState = {{ printersserialized | raw }} ;
     </script>
-
+    {{ encore_entry_script_tags("helper") }}
     {{ encore_entry_script_tags("orders") }}
-
-
-
-
 
 
 {% endblock %}

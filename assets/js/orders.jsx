@@ -7,7 +7,6 @@ import Orderform from './orderform'
 ReactDOM.render(
     <React.StrictMode>
         <Printers/>
-        <Orderform/>
     </React.StrictMode>,
     document.getElementById('root')
 );

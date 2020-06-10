@@ -7,7 +7,7 @@ export default () => {
 
 const kaktwig = initialAppState;
 
-    const sendFilesToPrinter = (printerid, filename) => {
+    const sendFsilesToPrinter = (printerid, filename) => {
         console.log(filename)
 
     };
@@ -15,7 +15,7 @@ const kaktwig = initialAppState;
 return (
 
 <>
-    <div> kaka eten doe ik graag</div>
+
 </>
 )
 

@@ -129,6 +129,27 @@ class AdminController extends AbstractController
     }
 
 
+    /**
+     * @Route( "/admin/search",  name="search_object")
+     * @param Request $request
+     * @param PrintedobjectRepository $repository
+     * @return Response
+     */
+
+    public function searchobject(Request $request, PrintedobjectRepository $repository)
+    {
+
+
+        $searchterm = $request->get('search');
+        $objects = $repository->findBySearch( $searchterm );
+
+
+        return $this->render('admin/objects.html.twig', ['objects' => $objects]);
+
+    }
+
+
+
 
     /**
      * @Route( "/admin/editobject/{id}", requirements={"id" = "\d+"}, name="edit_object")
