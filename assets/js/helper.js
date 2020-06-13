@@ -38,7 +38,8 @@ const sendFilesToPrinter = (printerid, filename) => {
     })
         // if response is 204 return
         //else send file to printer then send printcommand
-        .then(
+        /*
+                .then(
             res => {
                 console.log(res);
                 if ( res.header === 200 ){ return }
@@ -50,6 +51,8 @@ const sendFilesToPrinter = (printerid, filename) => {
 
 
             });
+         */
+
 };
 
 const fileUpload = (filename) => {

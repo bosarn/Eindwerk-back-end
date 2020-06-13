@@ -12,13 +12,13 @@
         </div>
 
     </div>
-    <div id="root" class="min-vh-80 bg-light"></div>
+    <div id="root" class="min-vh-100 bg-light"></div>
     <div id="piechart"></div>
 
 {% endblock %}
 
 {% block javascripts %}
-
+    {{ parent() }}
 
     <script type="text/javascript">
         var initialAppState = {{ printers_serialized | raw }} ;

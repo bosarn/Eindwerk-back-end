@@ -90,7 +90,12 @@ class Orders
     {
         return $this->id;
     }
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
 
+        return $this;
+    }
 
     public function getStatus(): ?string
     {

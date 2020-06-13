@@ -15,79 +15,85 @@ export default () => {
     const state = JSON.parse(init);
 
 
-    const [Printerdata, setPrinterdata] = useState(state);
 
-    // Even though it looks like this function doesn't do anything it is VITAL for the inner workings of the next function
-    // By a combination of sheer willpower and magic it can set the data of a different useState const.
-    const [Printer, setPrinter] = useState([]);
+// This function only works!!!
+    const [printerdata, setPrinterdata] = useState(state);
 
-
-// This function only works by sheer luck, do not sneeze on it or it will collapse!
-    const  printergetter  =  () =>
-        Printerdata.map( (printer,i) =>
-            axios({
+    const  getPrinter = () => {
+        return (printerdata.map ( async (printer) =>
+        //map return array of promises, solve outside of map
+        {
+            const response =  await axios({
                 method: "GET",
                 url: `http://${printer.IP}/api/printer`,
                 headers: {
                     "X-Api-Key": `${printer.APIkey}`,
                 }
-            }).then( res => {
+            });
 
-                let copy = Printerdata;
-                // data of results must be in array because React can't handle children
-                copy[i].data = [res.data];
-                setPrinter(printer);
-                setPrinterdata(copy);
-            }));
+            const data = response.data;
+            return {...printer, data }  }))};
 
+    // This function gets all the data from the printers supplied from the database and gets all actual data from each of them
+    // All printers must return data or this function won't work
+    const getAllPrinterData = () => Promise.all(getPrinter()).then(res=> setPrinterdata(res));
 
+    console.log(printerdata);
     useEffect(() => {
-        printergetter();
+        getAllPrinterData();
     }, []);
 
 
     return (
         <>
-            {Printerdata ?
-
-                Printerdata.map(printer =>
-                    (
-
-                        <div key={printer.id}>
-                            <div className="col mt-5 ml-5">
-                                <div className="card">
-                                    <img
-                                        className="card-image-top"
-                                        src={ 'http://'+printer.IP+':8080/?action=stream'}
-                                        // printer.ip :8080 ?action=stream
-                                        alt='Webcam disabled'
-                                        width="250"
-                                    />
-                                    <div className='card-body'>
-                                        <h4 className="card-title"> {printer.name}</h4>
-
-                                        {printer.data[0].state ?
-                                            <ul class="list-unstyled">
-                                                <li>  <strong> {printer.data[0].state.text} </strong></li>
-                                                <li> Bed <strong>{printer.data[0].temperature.bed.actual}</strong></li>
-                                                <li> Tool<strong>{printer.data[0].temperature.tool0.actual}</strong></li>
-
-                                            </ul>
-
-                                            : ''}
+            {printerdata.map( printer =>
 
 
-                                    </div>
-                                </div>
-                            </div>
+            <div key={printer.id}>
+                <div className="col mt-5 ml-5">
+                    <div className="card">
+                        <div className="card-header bg-primary text-light">
+                            <h4 className="card-title"> {printer.name} </h4>
+                        </div>
+                        <img
+                            className="card-image-top ml-auto mr-auto border border-primary rounded"
+                            src={'http://' + printer.IP + ':8080/?action=stream'}
+                            // printer.ip :8080 ?action=stream
+                            alt='Webcam disabled'
+                            width="250"
+                        />
+                        <div className='card-body'>
+
+
+                            {printer.data.state ?
+                                <ul className="list-unstyled">
+                                    <li><strong> {printer.data.state.text} </strong></li>
+                                    <li> Bed <strong>{printer.data.temperature.bed.actual}</strong></li>
+                                    <li> Tool<strong>{printer.data.temperature.tool0.actual}</strong></li>
+
+                                </ul>
+
+                                : ''}
+
 
                         </div>
+                    </div>
+                </div>
 
-                    )
-                )
-                : ( "unavailable")}
+            </div>
 
+                )}
         </>
     )}
 
 
+/*
+banned to the darkzone
+
+
+
+
+
+
+
+ */

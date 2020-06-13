@@ -44,7 +44,7 @@
 
                                     <label for="image_path">
                                         Image Path
-                                        <input type="text" name="image_path" placeholder="{{ image.path }}">
+                                        <input type="text" name="image_path" placeholder="https://wdev.be/wdev_arno/eindwerk/public{{ image.path }}">
                                     </label>
                                 {% endfor %}
                             </li>
@@ -89,7 +89,7 @@
                 <div class="media">
                     <div class="row no-gutters">
                 {% for image in object.Images %}
-                    <img src="{{ image.path }}" class="img-fluid img-thumbnail" style="object-fit: cover" alt="{{ image.name }}" >
+                    <img src="https://wdev.be/wdev_arno/eindwerk/public{{ image.path }}" class="img-fluid img-thumbnail" style="object-fit: cover" alt="{{ image.name }}" >
                 {% endfor %}
                 </div>
                 </div>

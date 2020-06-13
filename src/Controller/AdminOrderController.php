@@ -43,6 +43,7 @@ class AdminOrderController extends AbstractController
 
         $orderId = $request->request->get('order_id');
         $order = $repository->findOneBy(['id'=> $orderId]);
+
         $order->setStatus('Finished');
         $orderinvoicepath = $order->getInvoice();
 

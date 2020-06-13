@@ -56,7 +56,7 @@ class OrderUserListener extends AbstractController
             $dompdf->setHttpContext($context);
 
             $uniquestring = md5(uniqid());
-            $invoiceid = 'uploads/invoices/Invoice-order-'.$uniquestring.'.pdf' ;
+            $invoiceid = 'system/public/uploads/invoices/Invoice-order-'.$uniquestring.'.pdf' ;
 
             $html = $this->renderView('pdf.html.twig',[
                 'order' => $orders,

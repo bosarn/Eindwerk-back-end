@@ -4,14 +4,6 @@
     <div class="container">
         <h2>Total orders: {{ orders | length }}</h2>
 
-        See 1 order at a time onclick order see order details
-
-        Redo in react, Get api called printers
-        Get orders from DB
-        Send file => axios post
-        on 200 set file amount +1
-        etc..
-        invoice button ?
         <div id="root" class="row"></div>
     </div>
     <div class="container-fluid">
@@ -88,7 +80,7 @@ Twig sucks so badly it can't even call a fucking function from inside a form to 
 
 {% endblock %}
 {% block javascripts %}
-
+    {{ parent() }}
 
     <script type="text/javascript">
         var initialAppState = {{ printersserialized | raw }} ;

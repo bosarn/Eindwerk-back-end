@@ -84,7 +84,7 @@ class ViewRenderController extends AbstractController
 
         $printers =$printer->findAll();
         $orders = $repository->findBy(
-            array('status'=> 'test'),
+            array('status'=> 'Received'),
             array('date' => 'ASC')
         );
         return $this->render('admin/orders.html.twig',

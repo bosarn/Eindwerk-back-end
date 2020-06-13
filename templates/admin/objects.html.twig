@@ -2,15 +2,17 @@
 
 {% block body %}
     <div class="container">
-        <form method="post"  id="formsubmit" action="{{ path('search_object') }}" >
+    <form method="post"  id="formsubmit" action="{{ path('search_object') }}" >
         <div class="input-group input-group-lg mt-5">
             <div class="input-group-prepend">
 
-              <input  class="input-group-text bg-primary text-light" id="inputGroup-sizing-lg" value="Search object" type="submit">
+                <input  class="input-group-text bg-primary text-light" id="inputGroup-sizing-lg" value="Search object" type="submit">
             </div>
             <input name='search' class="form-control" type="search" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
         </div>
-        </form>
+    </form>
+    </div>
+    <div class="container-fluid">
         <div class="row">
             {% for object in objects %}
                     <div class="col">
@@ -18,7 +20,7 @@
 
                         {% for image in object.Images %}
                             {% if loop.first %}
-                                <img class="card-img-top" src="{{ asset(image.path)}}" alt="object_image">
+                                <img class="card-img-top" src="https://wdev.be/wdev_arno/eindwerk/public{{image.path}}" alt="object_image">
                             {% endif %}
                         {% endfor %}
 
