@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     normalizationContext={"groups"={"category:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"category:write"}, "swagger_definition_name"="Write"},
  *     collectionOperations={
- *         "get"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "get",
  *         "post"={"security"="is_granted('ROLE_ADMIN')"},
  *     },
  *     itemOperations={
@@ -49,6 +49,11 @@ class Category
      * @ORM\ManyToMany(targetEntity=Printedobject::class, inversedBy="Categories")
      */
     private $Printedobject;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $image;
 
 
     public function __construct()
@@ -107,6 +112,18 @@ class Category
         if ($this->Printedobject->contains($printedobject)) {
             $this->Printedobject->removeElement($printedobject);
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

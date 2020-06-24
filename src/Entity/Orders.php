@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 
+
 /**
  * @ApiResource(
  *     normalizationContext={"groups"={"order:read"}, "swagger_definition_name"="Read"},
@@ -78,10 +79,10 @@ class Orders
 
 
 
-    public function __construct()
+    public function __construct( )
     {
         $this->details = new ArrayCollection();
-        $this->date = new\DateTimeImmutable();
+        $this->date = new \DateTime();
         $this->status= 'Received';
     }
 

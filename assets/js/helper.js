@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 
-
 document.querySelectorAll('.formsubmit').forEach( item =>
     item.addEventListener( 'submit' ,
         (e) => {
@@ -22,6 +21,8 @@ const sendFilesToPrinter = (printerid, filename) => {
     const printerAPI = printerid.split(' ')[4];
 
     console.log(printerIP,filename, printerAPI);
+
+    po
     const body = ({
             "command": "select",
             "print": true

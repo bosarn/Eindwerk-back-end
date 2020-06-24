@@ -28,7 +28,11 @@ use Doctrine\Common\Collections\Criteria;
  *         "put"={"security"="is_granted('ROLE_ADMIN')"},
  *         "delete"={"security"="is_granted('ROLE_ADMIN')"}
  *     },
- *     shortName="objects"
+ *       attributes={
+ *          "pagination_items_per_page"=12,
+ *         },
+ *     shortName="objects",
+ *
  * )
  * @ORM\Entity(repositoryClass=PrintedobjectRepository::class)
  * @ApiFilter( SearchFilter::class, properties={"name": "partial"}),

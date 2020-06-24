@@ -69,20 +69,17 @@
                                     </label>
                             </li>
 
-                            <li class="list-group-item">
-                                <div class="row ml-5 mt-4">
-                                    <div class="card-link">
-                                        <button type="submit" class="btn btn-primary" > Edit</button>
-                                    </div>
-
-                                    <form class="card-link" action="{{ path('delete_object',{ 'id':  object.id  })  }}">
-                                        <button type="submit" class="btn btn-danger" > delete</button>
-                                    </form>
-
-                                </div>
-                            </li>
                         </ul>
+
+                            <div class="card-link">
+                                <button type="submit" class="btn btn-primary" > Edit</button>
+                            </div>
+
                         </form>
+                        <form class="card-link" action="{{ path('delete_object',{ 'id':  object.id  })  }}">
+                            <button type="submit" class="btn btn-danger" > delete</button>
+                        </form>
+
                     </div>
                 </div>
 
