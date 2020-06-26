@@ -1,0 +1,4 @@
+framework:
+    mailer:
+        #dsn: 'smtp://apikey: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@smtp.sendgrid.net:587'
+        dsn: 'sendgrid://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@default'
