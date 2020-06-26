@@ -69,18 +69,26 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
+     * @Groups({"user:read", "user:write"})
      */
     private $isDeleted;
 
     /**
      * @ORM\Column(type="string", length=1000, nullable=true)
+     * @Groups({"user:read", "user:write"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"user:read", "user:write"})
      */
     private $surname;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $register;
 
     public function __construct()
     {
@@ -244,6 +252,18 @@ class User implements UserInterface
     public function setSurname(?string $surname): self
     {
         $this->surname = $surname;
+
+        return $this;
+    }
+
+    public function getRegister(): ?string
+    {
+        return $this->register;
+    }
+
+    public function setRegister(string $register): self
+    {
+        $this->register = $register;
 
         return $this;
     }

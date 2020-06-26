@@ -9,6 +9,7 @@ use Doctrine\ORM\QueryBuilder;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Security;
 
+
 class UserAuthenticatedExtension implements QueryCollectionExtensionInterface
 {
     private $security;
@@ -37,10 +38,5 @@ class UserAuthenticatedExtension implements QueryCollectionExtensionInterface
                         ->setParameter('identifier', $user);
 
     }
-
-
-
-
-
 
 }

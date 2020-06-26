@@ -35,7 +35,7 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"object:read","category:write"})
+     * @Groups({"object:read","category:write","category:read"})
      */
     private $name;
 
@@ -52,6 +52,7 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=255)
+    *@Groups({"object:read","category:write","category:read"})
      */
     private $image;
 
