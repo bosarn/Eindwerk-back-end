@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -22,11 +21,10 @@ class RegisterController extends AbstractController
      * @Route("/api/register", name="api_register", methods={"POST"})
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @param Request $request
-     * @param MailerInterface $Cumfuckerkakbitch
+     * @param MailerInterface $mailer
      * @return JsonResponse
-     * @throws TransportExceptionInterface
      */
-    public function register(UserPasswordEncoderInterface $passwordEncoder, Request $request, MailerInterface $Cumfuckerkakbitch)
+    public function register(UserPasswordEncoderInterface $passwordEncoder, Request $request, MailerInterface $mailer)
     {
 
         $data = json_decode($request->getContent(), true);
@@ -35,12 +33,16 @@ class RegisterController extends AbstractController
         $email                  = $data['email'];
         $password               = $data['password'];
         $name                   = $data['name'];
+        $address                = $data['address'];
+        $postcode               = $data['postcode'];
+        $surname                = $data['surname'];
+        $number                 = $data['number'];
         $errors = [];
 
 
-        if(strlen($password) < 6)
+        if(strlen($password) < 8)
         {
-            $errors[] = "Password should be at least 6 characters.";
+            $errors[] = "Password should be at least 8 characters.";
         }
 
         if(!$errors)
@@ -49,23 +51,28 @@ class RegisterController extends AbstractController
             $user->setEmail($email);
             $user->setPassword($encodedPassword);
             $user->setName($name);
+            $user->setAddress($address);
+            //$user->setPostcode($postcode);
+            $user->setSurname($surname);
+            $user->setStreetnumber($number);
             //give register key
             $user->setIsDeleted(true);
-            $registerkey = '1234123412341234';
+            $registerkey = md5(uniqid());
             $user->setRegister($registerkey);
 
             try
             {
+
                 $mailservice = (new TemplatedEmail())
-                    ->from('bosmansarnoo@gmail.com')
-                    // ->to('$email')
-                    ->to('arnobosmans1993@gmail.com')
+                    ->from('3dprintdomaininfo@gmail.com')
+
+                    ->to($email)
                     ->subject('Confirm your mail for 3D-printDomain!')
                     ->htmlTemplate('emails/signup.html.twig')
                     ->context([
                 'register' => $registerkey
             ]);
-                $Cumfuckerkakbitch->send($mailservice);
+                $mailer->send($mailservice);
 
                 $entityManager->persist($user);
                 $entityManager->flush();
@@ -93,11 +100,9 @@ class RegisterController extends AbstractController
 
     /**
      * @Route("/api/registerconfirm", name="api_confirm")
-     * @param UserPasswordEncoderInterface $passwordEncoder
      * @param Request $request
-     * @param MailerInterface $Cumfuckerkakbitch
      * @return \Symfony\Component\HttpFoundation\Response
- */
+     */
     public function confirmRegister ( Request $request)
     {
 
@@ -118,7 +123,7 @@ class RegisterController extends AbstractController
 
         return $this->render('emails/return.html.twig', [
             'title' => 'Email confirmed',
-            'content' => 'Sign in',
+
 
         ]);
     }

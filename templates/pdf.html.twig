@@ -2,25 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Invoice 3DPrintFarm </title>
 </head>
 <body>
 
 
-<div style="background-color: lightslategray; width: 100%; height: 120px;">
-<h1 style="color: floralwhite" >Invoice 3DPrintFarm </h1>
-    <p style="margin-left: 80%; color: floralwhite;"> Company name adress and phone number</p>
-</div>
+<header style="background-color: #263238; width: 100%; height: 120px;  overflow: hidden;">
+    <div style="display: flex;">
+    <img src="https://wdev.be/wdev_arno/eindwerk/system/public/uploads/images/logo.png" alt='logo' style="display: block; width: 80px;">
+    <div style="margin-left: 90px"><h1 style="color: floralwhite" >3D-Print-Domain </h1>
+        <h4 style="color: floralwhite">Invoice</h4></div>
+
+    <ul style="position: absolute; margin-left: 80%; color: floralwhite; font-size:12px; list-style: none; ">
+        <li>3D-Print-Domain </li>
+        <li>ValseStraat 32 </li>
+        <li>3DprintAdmin</li>
+        <li>0434343421</li>
+        <li>3Dprintdomaininfo@gmail.com</li>
+    </ul>
+    </div>
+</header>
 <hr>
-<strong>{{ order.date | date ('d/m/Y')}}</strong><p>order:{{ orderid }}</p>
+<strong>{{ order.date | date ('d/m/Y')}}</strong><p>order: {{ orderid }}</p>
 <br>
 <br>
 
-    <h2>Name: </h2>
-    <strong>{{ order.user.name }}</strong>
-    <h2>Adress:</h2>
-    <strong>{{ order.shippingadress }}</strong>
-    <h3> Products: </h3>
+<h4>Name: </h4>
+<p>{{ user.name }} {{ user.surname }}</p>
+<h4>Adress:</h4>
+<ul>
+    <li>{{ user.address }} {{ user.streetnumber }}</li>
+
+</ul>
+
+<strong>{{ order.shippingadress }}</strong>
+<h3> Products: </h3>
 
 
 
@@ -53,41 +70,47 @@
     {% for detail in details %}
 
 
-    <tr>
+        <tr>
 
             <td>
                 {{ detail.objects.name }}
             </td>
 
             <td>
-              X  {{ detail.quantity }}
+                X  {{ detail.quantity }}
             </td>
 
             <td>
-                ${{ detail.objects.getCurrentPriceValue }}
+                {{ detail.objects.getFormattedPrice }}
             </td>
 
 
             <td>
-                ${{ detail.quantity*detail.objects.getCurrentPriceValue }}
+                €{{ detail.quantity*detail.objects.getCurrentPriceValue | slice(0,-2)  }},{{ detail.quantity*detail.objects.getCurrentPriceValue | slice(-2)  }}
             </td>
 
-    </tr>
+        </tr>
 
-{% endfor %}
+    {% endfor %}
 </table>
 <strong> Total: </strong>
 
 {% for detail in details %}
-
     {% set sum = detail.quantity*detail.objects.getCurrentPriceValue  + sum ?? 0 %}
-    {% if loop.last %} ${{ sum }}{% endif %}
+    {% if loop.last %} €{{ sum | slice(0,-2) }}, {{ sum|slice(-2) }}{% endif %}
 {% endfor %}
 
 <br>
 <br>
 <hr>
-Copyright en alles, alles is gereserveerd.
-Ik zie eulle daar
+
+Thank you for your purchase. See you soon!
+-----------------------------------------------------------------------------
+Aan de Heer/Mevr.
+
+    {{ user.address }} {{ user.streetnumber }}
+    Postcode + PLAATSNAAM
+
+
 </body>
 </html>

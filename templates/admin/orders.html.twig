@@ -13,7 +13,6 @@
                     <div class="card w-75 ml-auto mr-auto mt-5 row">
                         <div class="card-header bg-primary text-light">
                             <h3 class="card-title">Order {{ order.id }} {{ order.date | date ('d/m/Y') }}</h3>
-                            <div class="card-subtitle">User : {{ order.user.name }}</div>
                         </div>
                         <div class="card-body">
 
@@ -21,14 +20,14 @@
 
                 {% for object in order.Allobjects %}
                             <div class="col">
-                                <h5 class="center">{{ object.name }}
+                                <h5 class="text-center text-primary">{{ object.name }}
                                     {% for detail in object.details %}
                                     {% if  order.id == detail.orders.id %}: {{ detail.quantity }}</h5>
                                     {% endif %}
                                 {% endfor %} <!--Detail end-->
 
 
-                                <ul class="list-unstyled list-group  list-group-horizontal-md">
+                                <ul class="list-unstyled list-group  list-group-vertical-md">
 
 
 
@@ -49,7 +48,7 @@ Twig sucks so badly it can't even call a fucking function from inside a form to 
                                         {% endfor %}
                                     </select>
                                 </label>
-                                <button type="submit" class="btn btn-default"> Send file</button>
+                                <button type="submit" class="btn btn-primary"> Send file</button>
                             </form>
                         </li>
 
@@ -66,7 +65,7 @@ Twig sucks so badly it can't even call a fucking function from inside a form to 
                                 <label for="order_id">
                                     <input name="order_id" value="{{ order.id }}" hidden>
                                 </label>
-                                <button type="submit" class="btn btn-default"> Invoice</button>
+                                <button type="submit" class="btn btn-primary"> Invoice</button>
                             </form>
                         </div>
                     </div>

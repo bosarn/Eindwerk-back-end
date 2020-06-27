@@ -87,7 +87,7 @@ class AdminOrderController extends AbstractController
         // printer status -> closed
         // redirects@return RedirectResponse
         // requirements={"id" = "\d+"}
-        return $this->redirect('/admin/orders');
+        return $this->redirectToRoute('app_admin_orders');
 
     }
     /**
@@ -131,7 +131,7 @@ foreach( $objectID as $id){
         $entityManager->persist($order);
         $entityManager->flush();
 
-        return $this->redirect('/admin/objects');
+        return $this->redirectToRoute('app_admin_orders');
 
     }
 

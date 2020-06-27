@@ -8,9 +8,13 @@ use App\Entity\Orders;
 use App\Entity\User;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use phpDocumentor\Reflection\Type;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+
 
 class OrderUserListener extends AbstractController
 {
@@ -18,17 +22,23 @@ class OrderUserListener extends AbstractController
      * @var Security
      */
     private $security;
+    /**
+     * @var MailerInterface
+     */
+    private $mailer;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security, MailerInterface $mailer)
     {
         $this->security = $security;
+        $this->mailer = $mailer;
     }
 
     /**
      * @param Orders $orders
-     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse|void
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    public function prePersist(Orders $orders)
+    public function prePersist(Orders $orders )
     {
         if($orders->getUser()){
             return;
@@ -61,7 +71,8 @@ class OrderUserListener extends AbstractController
             $html = $this->renderView('pdf.html.twig',[
                 'order' => $orders,
                 'details' => $details,
-                'orderid' => $uniquestring
+                'orderid' => $uniquestring,
+                'user' => $user
             ]);
 
             $dompdf->loadHtml($html);
@@ -69,13 +80,22 @@ class OrderUserListener extends AbstractController
             $dompdf->render();
             $output = $dompdf->output();
 
-            // todo get id does not work for some reason, too bad! Change to uniqueid on construct?
 
             file_put_contents($invoiceid, $output);
             $orders->setInvoice($invoiceid);
 
+            $email = $user->getEmail();
+            $mailservice = (new Email())
+                ->from('3dprintdomaininfo@gmail.com')
+                ->to('bosmansarnoo@gmail.com')
+                ->subject('Thank you for your purchase, from 3D-Print-Domain!')
+                ->text('Thank you for your purchase! You will find the invoice in the attachments')
+
+                ->attachFromPath($invoiceid);
+            $this->mailer->send($mailservice);
         }
 
     }
+
 
 }

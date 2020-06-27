@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ORM\Entity(repositoryClass=PriceRepository::class)
  */
-// todo Calculate price by weight && printtime
+
 class Price
 {
     /**
@@ -124,6 +124,12 @@ class Price
     public function setPriceend( $priceend): self
     {
         $this->priceend = $priceend;
+
+        return $this;
+    }
+    public function setPricestart( $pricestart): self
+    {
+        $this->pricestart = $pricestart;
 
         return $this;
     }

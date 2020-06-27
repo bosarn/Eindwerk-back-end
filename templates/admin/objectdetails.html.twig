@@ -8,7 +8,7 @@
                 <div class="card-header bg-primary text-light"> object-detail</div>
                     <div class="card-body">
                         <h3 class="card-title text-center mb-4" >Object: {{ object.id}}</h3>
-                        <form  action="{{ path('edit_object',{ 'id': object.id  }) }}">
+                        <form  action="{{ path('edit_object',{ 'id': object.id  }) }}" method="POST" enctype="multipart/form-data">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
 
@@ -26,6 +26,12 @@
                                     Size:
                                     <input type="text" name="object_size" placeholder="{{ object.size }}">
                                 </label>
+
+                                    <label for="object_description">
+                                        Object description
+                                    </label>
+                                    <textarea  name="object_description" id="object_description" class="form-control"></textarea>
+
                                 <label for="object_published">
                                     Published:
                                     <input type="checkbox" name="object_published"  {{ object.published ? 'checked' : '' }}>
@@ -34,31 +40,18 @@
                             </li>
 
                             <li class="list-group-item">
-                                <h4>Images</h4>
-                                {% for image in object.Images %}
+                                <h4>Add new images</h4>
 
-                                    <label for="object_image">
-                                        Image name
-                                        <input type="text" name="object_image" placeholder="{{ image.name }}">
-                                    </label>
 
-                                    <label for="image_path">
-                                        Image Path
-                                        <input type="text" name="image_path" placeholder="https://wdev.be/wdev_arno/eindwerk/public{{ image.path }}">
+                                <div class="form-group">
+                                    <label for="object_images">
+                                        Add all images, previous images will be deleted!
                                     </label>
-                                {% endfor %}
+                                    <input type="file" name="object_images[]" id="object_images" multiple="multiple" class="form-control">
+                                </div>
                             </li>
 
-                            <li class="list-group-item">
-                                <h4>Files</h4>
-                                {% for file in object.files %}
 
-                                    <label for="object_file">
-                                        file name
-                                        <input type="text" name="object_file" placeholder="{{ file.name }}">
-                                    </label>
-                                {% endfor %}
-                            </li>
 
                             <li class="list-group-item">
                                 <h4 class="">Prices</h4>
@@ -66,6 +59,7 @@
                                         price
                                         <input type="text" name="object_price" placeholder="{{ object.getCurrentPriceValue }}">
                                         <input type="date" name="object_price_start" >
+                                        <input type="text" name="object_price_description">
                                     </label>
                             </li>
 
@@ -86,7 +80,7 @@
                 <div class="media">
                     <div class="row no-gutters">
                 {% for image in object.Images %}
-                    <img src="https://wdev.be/wdev_arno/eindwerk/public{{ image.path }}" class="img-fluid img-thumbnail" style="object-fit: cover" alt="{{ image.name }}" >
+                    <img src="https://wdev.be/wdev_arno/eindwerk/system/public{{ image.path }}" class="img-fluid img-thumbnail" style="object-fit: cover" alt="{{ image.name }}" >
                 {% endfor %}
                 </div>
                 </div>

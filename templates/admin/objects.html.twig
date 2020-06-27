@@ -11,6 +11,7 @@
             <input name='search' class="form-control" type="search" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
         </div>
     </form>
+
     </div>
     <div class="container-fluid">
         <div class="row">
@@ -20,7 +21,7 @@
 
                         {% for image in object.Images %}
                             {% if loop.first %}
-                                <img class="card-img-top" src="https://wdev.be/wdev_arno/eindwerk/public{{image.path}}" alt="object_image">
+                                <img class="card-img-top" src="https://wdev.be/wdev_arno/eindwerk/system/public{{image.path}}" alt="object_image">
                             {% endif %}
                         {% endfor %}
 
@@ -29,7 +30,7 @@
                         <ul class="card-text list-unstyled" >
                             <li>Published : {{ object.published ? 'Yes': 'No' }} </li>
                             <li>Time to print: {{ object.PrintTime }}</li>
-                            <li>Price: {{ object.getCurrentPriceValue }} </li>
+                            <li>Price: {{ object.getFormattedPrice }} </li>
                             <li>How many files: {{ object.files | length }} </li>
 
                         </ul>

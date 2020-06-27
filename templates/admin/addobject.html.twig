@@ -1,15 +1,21 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <div class="container-fluid mt-5">
+    <div class="container-fluid mt-5 text-center">
         <h2 class="d-flex justify-content-center"> Add object</h2>
 <form name="post" action="{{ path('add_object')  }}" method="POST" enctype="multipart/form-data" class="container" >
-
+    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
     <div class="form-group">
         <label for="object_name">
             Objectname
         </label>
 
         <input type="text" id="object_name" name="object_name" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="object_description">
+            Object description
+        </label>
+        <textarea  name="object_description" id="object_description" class="form-control"></textarea>
     </div>
     <div class="form-group">
         <label for="object_printtime">
@@ -28,6 +34,12 @@
             Price
         </label>
         <input type="text" name="object_price" id="object_price" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="object_publish">
+            Publish object
+        </label>
+        <input type="checkbox" name="object_publish" id="object_publish" class="form-control">
     </div>
     <div class="form-group">
         <label for="object_files">
@@ -50,13 +62,14 @@
             {% endfor %}
         </select>
     </div>
-    <!-- TODO Add input for Categories <input name=Object_Categories[]>-->
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+
+
 </form>
+        <input id='addObject' onclick="addInput()" class="btn btn-primary center-block" type="submit" value="Add category">
     </div>
 
-    <input id='addObject' onclick="addInput()" class="btn btn-primary" type="submit">
+
 {% endblock %}
 
 {% block javascripts %}

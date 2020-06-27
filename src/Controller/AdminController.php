@@ -54,16 +54,20 @@ class AdminController extends AbstractController
         $name = $request->get('object_name');
         $printtime = $request->get('object_printtime');
         $size = $request->get('object_size');
+        $description = $request->get('object_description');
         $price = $request->get('object_price');
         $files = $request->files->all()['object_files'];
         $images = $request->files->all()['object_images'];
         $categories = $request->get('object_Category');
+        $publish = $request->get('object_publish');
 
         $object = new Printedobject();
 
         $object->setName($name);
         $object->setPrintTime($printtime);
         $object->setSize($size);
+        $object->setDescription($description);
+        $object->setPublished($publish);
 
         $priceObject = new Price();
         $priceObject->setValue($price);
@@ -106,7 +110,7 @@ class AdminController extends AbstractController
         $entityManager->persist($object);
         $entityManager->flush();
 
-        return $this->redirect('/admin/objects');
+        return $this->redirectToRoute('app_admin_objects');
 
     }
 
@@ -125,7 +129,7 @@ class AdminController extends AbstractController
         $object = $repository->findOneBy(['id' => $id]);
         $em->remove($object);
         $em->flush();
-        return $this->redirect('/admin/objects');
+        return $this->redirectToRoute('app_admin_objects');
     }
 
 
@@ -162,69 +166,83 @@ class AdminController extends AbstractController
         $uploads_directory=$this->getParameter('uploads_directory');
         $entityManager = $this->getDoctrine()->getManager();
 
-
         $id = $request->get('id');
         $name = $request->get('object_name');
+        $description = $request->get('object_description');
         $printtime = $request->get('object_printtime');
         $size = $request->get('object_size');
+        $published = $request->get('object_published');
         $price = $request->get('object_price');
-
+        $priceDescription = $request->get('object_price_description');
+        $priceDate = $request->get('object_price_start');
+        $images = $request->files->all()['object_images'];
 
         $object = $repository->findOneBy(['id' => $id]);
-
-        $object->setName($name);
-        $object->setSize($size);
-        $object->setPrintTime($printtime);
-/**
-        $removeFiles = $object->getFiles();
-        foreach( $removeFiles as $file ){
-            $object->removeFile($file);
+        if ($name !== '') {
+            $object->setName($name);
         }
-        $removeImages = $object->getImages();
-        foreach( $removeImages as $image ){
-            $object->removeFile($image);
+        if ($description !== '') {
+            $object->setDescription($description);
         }
- * */
-        // TODO Files add and images add in edit
-        $lastprice = $object->getCurrentPrice();
+        if ($size !== '') {
+            $object->setSize($size);
+        }
+        if ($printtime !== '') {
+            $object->setPrintTime($printtime);
+        }
+        if ($published !== '') {
 
-        foreach($lastprice as $try) {
-            $try->setPriceend(New \DateTime());
+            $object->setPublished($published);
         }
 
-        $newPrice = new Price();
-        $newPrice -> setValue($price);
-        $newPrice -> setDescription('Changedprice');
-        $object->addPrice($newPrice);
+        if ($images) {
+            //remove previous images
+            $removeImages = $object->getImages();
+            foreach( $removeImages as $previousimage ){
+                $entityManager->remove($previousimage);
+                $entityManager->flush();
+            }
+            foreach ($images as $image) {
+                $newImage = new Images();
+                $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                $imagefilename = md5(uniqid()).'.'.$image->guessExtension();
+                $image->move($uploads_directory.'/images/', $imagefilename);
+                $newImage->setPath('/uploads/images/'.$imagefilename);
+                $newImage->setName($originalFilename);
+                $object->addImage($newImage);
+                $entityManager->persist($newImage);
+            }
 
-/*
-        foreach( $files as $file ) {
-            $newFiles = new Files();
-            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-            $filename = md5(uniqid()).'.'.$file->guessExtension();
+        }
 
-            $newFiles->setGCODE(file_get_contents($file));
-            $file->move($uploads_directory.'/files/', $filename);
-            $newFiles->setName($originalFilename);
-            $object->addFile($newFiles);
-            $entityManager->persist($newFiles);
-        }
-        foreach ($images as $image) {
-            $newImage = new Images();
-            $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            $imagefilename = md5(uniqid()).'.'.$image->guessExtension();
-            $image->move($uploads_directory.'/images/', $imagefilename);
-            $newImage->setPath('/uploads/images/'.$imagefilename);
-            $newImage->setName($originalFilename);
-            $object->addImage($newImage);
-            $entityManager->persist($newImage);
-        }
-*/
+
+
+        if($price !== ''){
+            //Price manipulation: set previous price to end, set new price up
+            $lastprice = $object->getCurrentPrice();
+
+            foreach($lastprice as $try) {
+                $try->setPriceend(New \DateTime());
+            }
+
+            $newPrice = new Price();
+            $newPrice -> setValue($price);
+            $newPrice -> setDescription($priceDescription);
+
+            $date = new \DateTime($priceDate);
+            $newPrice -> setPricestart($date);
+
+            $object->addPrice($newPrice);
+   }
+
+
+
+
         $entityManager->persist($object);
         $entityManager->flush();
 
 
-        return $this->redirect('/admin/objects');
+        return $this->redirectToRoute('app_admin_objects');
     }
 
 }

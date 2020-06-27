@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <div class="container-fluid mt-5">
+    <div class="container-fluid mt-5 text-center">
         <h2 class="d-flex justify-content-center"> Add order</h2>
         <form name="post" action="{{ path('add_order')  }}" method="POST" enctype="multipart/form-data" class="container" >
-
+            <button type="submit" class="btn btn-primary btn-lg">Submit</button>
             <div class="form-group">
                 <label for="shipping_adress">
                     shipping adress
@@ -28,17 +28,16 @@
                     Amount:
                 </label>
                 <input type="text" name="object_amount[]" multiple="multiple" id="object_amount" class="form-control" >
-            </div>
-           Add objects with JS
-            dropdown menu with all objects + sign to add
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
 
+
+            </div>
+
+        </form>
+        <label>
+            <button id='addObject' onclick="addInput()" class="btn btn-primary center-block"  value="Add object">Add object </button>
+        </label>
     </div>
 
-    <label>
-    <input id='addObject' onclick="addInput()" class="btn btn-primary" type="submit">
-</label>
 
 
 
@@ -49,9 +48,11 @@
     {{ parent() }}
 <script>
 
-let count = 1;
+
+    let count = 1;
 
 const addInput = () => {
+
 
     $('#addafter').append(`<div><label for="object_select"><select name="object_select[${count}]">{% for object in objects %}<option name="object_select[${count}]"> {{ object.id }} : {{ object.name }} </option>{% endfor %}</select><label for="object_amount">Amount:</label><input type="text" name="object_amount[${count}]" id="object_amount" class="form-control"></div>`)
 

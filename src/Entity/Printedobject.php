@@ -65,7 +65,7 @@ class Printedobject
 
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      *@Groups({"object:read", "object:write"})
      */
     private $size;
@@ -155,12 +155,12 @@ class Printedobject
     }
 
 
-    public function getSize(): ?int
+    public function getSize(): ?string
     {
         return $this->size;
     }
 
-    public function setSize(?int $size): self
+    public function setSize(?string $size): self
     {
         $this->size = $size;
 
@@ -378,7 +378,15 @@ public function setPublished(?bool $published): self
     return $this;
 }
 
+public function getFormattedPrice() {
+    $price = $this->getCurrentPriceValue();
+    $last2characters = substr(strval($price), -2);
+    $firstcharacters = substr(strval($price), 0, -2);
 
+
+
+    return  '€'.$firstcharacters . ',' . $last2characters;
+}
 
 
 }

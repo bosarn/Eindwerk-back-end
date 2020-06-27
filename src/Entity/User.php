@@ -86,9 +86,22 @@ class User implements UserInterface
     private $surname;
 
     /**
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $register;
+
+    /**
+     * @Groups({"user:read", "user:write","order:read","order:write"})
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $Streetnumber;
+
+    /**
+     * @Groups({"user:read", "user:write","order:read","order:write"})
+     * @ORM\ManyToOne(targetEntity=Postcode::class, inversedBy="users")
+     */
+    private $postcode;
 
     public function __construct()
     {
@@ -264,6 +277,30 @@ class User implements UserInterface
     public function setRegister(string $register): self
     {
         $this->register = $register;
+
+        return $this;
+    }
+
+    public function getStreetnumber(): ?int
+    {
+        return $this->Streetnumber;
+    }
+
+    public function setStreetnumber(?int $Streetnumber): self
+    {
+        $this->Streetnumber = $Streetnumber;
+
+        return $this;
+    }
+
+    public function getPostcode(): ?Postcode
+    {
+        return $this->postcode;
+    }
+
+    public function setPostcode(?Postcode $postcode): self
+    {
+        $this->postcode = $postcode;
 
         return $this;
     }
