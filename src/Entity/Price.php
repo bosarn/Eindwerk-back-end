@@ -47,7 +47,7 @@ class Price
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity=Printedobject::class, inversedBy="Price")
+     * @ORM\ManyToOne(targetEntity=Printedobject::class, inversedBy="Price", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $Printedobject;
@@ -133,5 +133,6 @@ class Price
 
         return $this;
     }
+
 
 }

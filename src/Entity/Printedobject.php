@@ -32,8 +32,9 @@ use Doctrine\Common\Collections\Criteria;
  *          "pagination_items_per_page"=12,
  *         },
  *     shortName="objects",
- *
+ *      cacheHeaders={"max_age"=60, "shared_max_age"=120, "vary"={"Authorization", "Accept-Language"}},
  * )
+ *
  * @ORM\Entity(repositoryClass=PrintedobjectRepository::class)
  * @ApiFilter( SearchFilter::class, properties={"name": "partial"}),
  * @ApiFilter(BooleanFilter::class , properties={"published"})
@@ -77,7 +78,7 @@ class Printedobject
     private $details;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="Printedobject",cascade={"remove"})
+     * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="Printedobject",cascade={"persist"})
      * @Groups({"object:read","order:write","object:write"})
      */
     private $Categories;
@@ -97,7 +98,7 @@ class Printedobject
     private $images;
 
     /**
-     * @ORM\OneToMany(targetEntity=Price::class, mappedBy="Printedobject",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=Price::class, mappedBy="Printedobject",cascade={"persist", "remove"})
      *@Groups({"object:read","object:write"})
      */
     private $Price;

@@ -69,17 +69,20 @@ class AdminController extends AbstractController
         $object->setDescription($description);
         $object->setPublished($publish);
 
+
         $priceObject = new Price();
         $priceObject->setValue($price);
         $priceObject->setDescription('initial price');
         $object->addPrice($priceObject);
         $entityManager->persist($priceObject);
 
+
         foreach ( $categories as $category) {
             if($category !== 'None...'){
                 $newobjectCategory = $categoryRepository->findOneBy(['name'=> $category]);
                 $newobjectCategory->addPrintedobject($object);
                 $entityManager->persist($newobjectCategory);
+
             }
 
 
@@ -95,6 +98,7 @@ class AdminController extends AbstractController
             $newFiles->setName($originalFilename);
             $object->addFile($newFiles);
             $entityManager->persist($newFiles);
+
         }
         foreach ($images as $image) {
             $newImage = new Images();
@@ -105,6 +109,7 @@ class AdminController extends AbstractController
             $newImage->setName($originalFilename);
             $object->addImage($newImage);
             $entityManager->persist($newImage);
+
         }
 
         $entityManager->persist($object);
