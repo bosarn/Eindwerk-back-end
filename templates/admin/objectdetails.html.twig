@@ -18,7 +18,7 @@
                                     </label>
 
                                     <label for="object_printtime">
-                                        printtime:
+                                        Aproximate print-time in minutes:
                                         <input type="text" name="object_printtime" placeholder="{{ object.PrintTime }}">
                                     </label>
 
@@ -30,7 +30,8 @@
                                     <label for="object_description">
                                         Object description
                                     </label>
-                                    <textarea  name="object_description" id="object_description" class="form-control"></textarea>
+                                <p>Adding the description can be done in raw text or in HTML</p>
+                                    <textarea  name="object_description" id="object_description" class="form-control" placeholder="{{ object.description }}"></textarea>
 
                                 <label for="object_published">
                                     Published:
@@ -55,8 +56,10 @@
 
                             <li class="list-group-item">
                                 <h4 class="">Prices</h4>
+                                <p> Add price for the object, don't add punctuation (1295 -> 12,95).
+                                    Adding a description to a price will trigger a sale on the webshop</p>
                                     <label for="object_price">
-                                        price
+                                        Add price:
                                         <input type="text" name="object_price" placeholder="{{ object.getCurrentPriceValue }}">
                                         <input type="date" name="object_price_start" >
                                         <input type="text" name="object_price_description">

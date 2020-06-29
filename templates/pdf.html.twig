@@ -12,13 +12,13 @@
     <div style="display: flex;">
     <img src="https://wdev.be/wdev_arno/eindwerk/system/public/uploads/images/logo.png" alt='logo' style="display: block; width: 80px;">
     <div style="margin-left: 90px"><h1 style="color: floralwhite" >3D-Print-Domain </h1>
-        <h4 style="color: floralwhite">Invoice</h4></div>
+        <h4 style="color: floralwhite">Van idee naar Invoice</h4></div>
 
-    <ul style="position: absolute; margin-left: 80%; color: floralwhite; font-size:12px; list-style: none; ">
+    <ul style="position: absolute; margin-left: 70%; color: floralwhite; font-size:12px; list-style: none; ">
         <li>3D-Print-Domain </li>
         <li>ValseStraat 32 </li>
         <li>3DprintAdmin</li>
-        <li>0434343421</li>
+        <li>070/245 245</li>
         <li>3Dprintdomaininfo@gmail.com</li>
     </ul>
     </div>
@@ -105,11 +105,34 @@
 <hr>
 
 Thank you for your purchase. See you soon!
------------------------------------------------------------------------------
-Aan de Heer/Mevr.
+<br><br><br>
+Address:<br>
+------------------------------------------------------------------------------------------
 
-    {{ user.address }} {{ user.streetnumber }}
-    Postcode + PLAATSNAAM
+
+
+<br><br><br>
+
+
+
+
+Aan de Heer/Mevr.
+<br>
+<br>
+
+{% if order.shippingadress == false %}
+    {{ user.name }} {{ user.surname }}<br>
+    {{ user.address }} {{ user.streetnumber }} <br>
+    {{ user.postcode.Postcode }} {{ user.postcode.plaatsnaam }} <br>
+    {{ user.postcode.gemeente }}
+    {% else %}
+        {{ order.shippingadress }}
+
+{% endif %}
+
+
+
+
 
 
 </body>

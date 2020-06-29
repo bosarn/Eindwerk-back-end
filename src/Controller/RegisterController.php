@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Postcode;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -48,11 +49,15 @@ class RegisterController extends AbstractController
         if(!$errors)
         {
             $encodedPassword = $passwordEncoder->encodePassword($user, $password);
+
+            $postRepo = $this->getDoctrine()->getRepository(Postcode::class);
+            $postcodeObject = $postRepo->findOneBy(['id' => $postcode]);
+
             $user->setEmail($email);
             $user->setPassword($encodedPassword);
             $user->setName($name);
             $user->setAddress($address);
-            //$user->setPostcode($postcode);
+            $user->setPostcode($postcodeObject);
             $user->setSurname($surname);
             $user->setStreetnumber($number);
             //give register key
@@ -123,6 +128,7 @@ class RegisterController extends AbstractController
 
         return $this->render('emails/return.html.twig', [
             'title' => 'Email confirmed',
+            'content' => 'Click the link below to go to the homepage'
 
 
         ]);

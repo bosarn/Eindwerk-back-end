@@ -99,9 +99,11 @@ class User implements UserInterface
 
     /**
      * @Groups({"user:read", "user:write","order:read","order:write"})
-     * @ORM\ManyToOne(targetEntity=Postcode::class, inversedBy="users")
+     * @ORM\ManyToOne(targetEntity=Postcode::class)
      */
     private $postcode;
+
+
 
     public function __construct()
     {

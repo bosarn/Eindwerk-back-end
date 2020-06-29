@@ -37,7 +37,7 @@ class ViewRenderController extends AbstractController
     }
 
     /**
-     * @Route("/object/form", name="app_object_form")
+     * @Route("admin/object/form", name="app_object_form")
      * @param CategoryRepository $repository
      * @return Response
      */
@@ -49,7 +49,7 @@ class ViewRenderController extends AbstractController
     }
 
     /**
-     * @Route("/order/form", name="app_order_form")
+     * @Route("admin/order/form", name="app_order_form")
      * @param PrintedobjectRepository $repository
      * @return Response
      */

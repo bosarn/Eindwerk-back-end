@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PostcodeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+
 /**
  * @ApiResource(
  *     normalizationContext={"groups"={"code:read"}, "swagger_definition_name"="Read"},
@@ -24,7 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     }
  * )
  * @ORM\Entity(repositoryClass=PostcodeRepository::class)
- *
+ * @ApiFilter( SearchFilter::class, properties={"postcode": "partial"})
  */
 
 class Postcode
@@ -38,27 +41,31 @@ class Postcode
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"code:read","code:write"})
+     * @Groups({"user:read", "user:write","code:read","code:write"})
      */
     private $gemeente;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"code:read","code:write"})
+     * @Groups({"user:read", "user:write","code:read","code:write"})
+     */
+    private $plaatsnaam;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"user:read", "user:write","code:read","code:write"})
      */
     private $postcode;
 
-    /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     *
-     */
-    private $user;
+
+
+
 
     /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="postcode")
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"user:read", "user:write","code:read","code:write"})
      */
-    private $users;
+    private $provincie;
 
     public function __construct()
     {
@@ -78,6 +85,17 @@ class Postcode
     public function setGemeente(string $gemeente): self
     {
         $this->gemeente = $gemeente;
+
+        return $this;
+    }
+    public function getPlaatsnaam(): ?string
+    {
+        return $this->plaatsnaam;
+    }
+
+    public function setPlaatsnaam(string $plaatsnaam): self
+    {
+        $this->plaatsnaam = $plaatsnaam;
 
         return $this;
     }
@@ -133,6 +151,18 @@ class Postcode
                 $user->setPostcode(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProvincie(): ?string
+    {
+        return $this->provincie;
+    }
+
+    public function setProvincie(?string $provincie): self
+    {
+        $this->provincie = $provincie;
 
         return $this;
     }

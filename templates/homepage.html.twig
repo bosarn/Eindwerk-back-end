@@ -2,18 +2,105 @@
 
 {% block body %}
     <div class="container">
-        <div class="row" hidden="hidden">
-            Total orders
-            Total orders today
-
-            printers in action
-            stats graph
-            dispaly snapshots if camera is disabled
-        </div>
-
     </div>
-    <div id="root" class="min-vh-100 bg-light"></div>
-    <div id="piechart"></div>
+    <div id="root" class="bg-light"></div>
+<div class="row">
+    <div class="col mt-5">
+        <div class="card">
+            <img
+                    class="card-image-top"
+                    src="http://192.168.0.134:8080/?action=snapshot"
+                    alt='Webcam disabled'
+                    width="250"
+            />
+            <div class='card-body'>
+
+                <ul>
+                    <li>
+                        Printer up:
+                        <strong>Operational</strong>
+                    </li>
+                    <li>
+                        SD card ready:
+                        <strong>Ready</strong>
+                    </li>
+                    <li>
+                        Bed temperature:
+                        <strong>44</strong>
+                    </li>
+                    <li>
+                        Hotend temp:
+                        <strong>195</strong>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <div class="col mt-5">
+        <div class="card">
+            <img
+                    class="card-image-top"
+                    src="http://192.168.0.134:8080/?action=snapshot"
+                    alt='Webcam disabled'
+                    width="250"
+            />
+            <div class='card-body'>
+
+                <ul>
+                    <li>
+                        Printer up: <strong>Operational</strong>
+                    </li>
+                    <li>
+                        SD card ready:
+                        <strong>Ready</strong>
+                    </li>
+                    <li>
+                        Bed temperature:
+                        <strong>50</strong>
+                    </li>
+                    <li>
+                        Hotend temp:
+                        <strong>201</strong>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <div class="col mt-5">
+        <div class="card">
+            <img
+                    class="card-image-top"
+                    src="http://192.168.0.134:8080/?action=snapshot"
+                    alt='Webcam disabled'
+                    width="250"
+            />
+            <div class='card-body'>
+
+                <ul>
+                    <li>
+                        Printer up: <strong>Operational</strong>
+                    </li>
+                    <li>
+                        SD card ready:
+                        <strong>Ready</strong>
+                    </li>
+                    <li>
+                        Bed temperature:
+                        <strong>27</strong>
+                    </li>
+                    <li>
+                        Hotend temp:
+                        <strong>27</strong>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+</div>
 
 {% endblock %}
 
@@ -27,33 +114,6 @@
 
 
 
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-
-        // Load google charts
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
-
-        // Draw the chart and set the chart values
-        function drawChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Task', 'Hours per Day'],
-                ['Work', 8],
-                ['Friends', 2],
-                ['Eat', 2],
-                ['TV', 2],
-                ['Gym', 2],
-                ['Sleep', 8]
-            ]);
-
-            // Optional; add a title and set the width and height of the chart
-            var options = {'title':'My Average Day', 'width':550, 'height':400};
-
-            // Display the chart inside the <div> element with id="piechart"
-            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-            chart.draw(data, options);
-        }
-    </script>
 
 
 

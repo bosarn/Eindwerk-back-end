@@ -36,8 +36,7 @@ use Doctrine\Common\Collections\Criteria;
  * )
  * @ORM\Entity(repositoryClass=PrintedobjectRepository::class)
  * @ApiFilter( SearchFilter::class, properties={"name": "partial"}),
- *     (RangeFilter::class , properties={"getCurrentPriceValue"}),
- *     (BooleanFilter::class , properties={"published"})
+ * @ApiFilter(BooleanFilter::class , properties={"published"})
  *
  *
  */
@@ -91,14 +90,14 @@ class Printedobject
     private $Files;
 
     /**
-     * @ORM\OneToMany(targetEntity=Images::class, mappedBy="printedobjects",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Images::class, mappedBy="printedobjects",cascade={"remove"})
      * @Groups({"detail:read","object:read", "object:write"})
      *
      */
     private $images;
 
     /**
-     * @ORM\OneToMany(targetEntity=Price::class, mappedBy="Printedobject",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Price::class, mappedBy="Printedobject",cascade={"remove"})
      *@Groups({"object:read","object:write"})
      */
     private $Price;

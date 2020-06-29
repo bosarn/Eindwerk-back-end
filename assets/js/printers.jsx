@@ -25,7 +25,7 @@ export default () => {
         {
             const response =  await axios({
                 method: "GET",
-                url: `http://${printer.IP}/api/printer`,
+                url: `https://${printer.IP}/api/printer`,
                 headers: {
                     "X-Api-Key": `${printer.APIkey}`,
                 }

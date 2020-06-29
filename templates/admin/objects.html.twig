@@ -28,9 +28,9 @@
                             <h4 class="card-title text-center">{{ object.Name }} </h4>
                             <div class="card-body">
                         <ul class="card-text list-unstyled" >
-                            <li>Published : {{ object.published ? 'Yes': 'No' }} </li>
+                            <li >Published : <p class="{{ object.published? 'text-success' : 'text-danger' }}">{{ object.published ? 'Yes' : 'No' }}</p> </li>
                             <li>Time to print: {{ object.PrintTime }}</li>
-                            <li>Price: {{ object.getFormattedPrice }} </li>
+                            <li>Price: <strong>{{ object.getFormattedPrice }}</strong>  </li>
                             <li>How many files: {{ object.files | length }} </li>
 
                         </ul>

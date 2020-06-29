@@ -9,11 +9,6 @@ import { useEffect, useState } from "react";
 
 export default () => {
 
-    const data = [
-        { argument: 1, value: 10 },
-        { argument: 2, value: 20 },
-        { argument: 3, value: 30 },
-    ];
 
 
     const [printerdata, setPrinterdata] = useState('');
@@ -26,7 +21,6 @@ export default () => {
                 "X-Api-Key": "ECB47339A16F42D0BA8588ED4DD3603F",
             },
         }).then((res) => {
-            console.log(res);
             setPrinterdata(res.data);
         });
 
@@ -43,7 +37,7 @@ export default () => {
                     <div className="card">
                         <img
                             className="card-image-top"
-                            src="http://192.168.0.134:8080/?action=stream"
+                            src="https://192.168.0.134:8080/?action=stream"
                             // printer.ip :8080 ?action=stream
                             alt='Webcam disabled'
                             width="400"
@@ -68,7 +62,7 @@ export default () => {
                                 </li>
                             </ul>
                         ) : (
-                            "unavailable"
+                            "printerdata is currently unavailabe"
                         )}
                         </div>
                     </div>
@@ -81,16 +75,3 @@ export default () => {
     );
 
 };
-
-/*
-
-
-            <Chart
-                data={data}
-            >
-                <ArgumentAxis />
-                <ValueAxis />
-
-                <LineSeries valueField="value" argumentField="argument" />
-            </Chart>
- */
