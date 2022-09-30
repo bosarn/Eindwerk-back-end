@@ -9,7 +9,7 @@
         "ext-json": "*",
         "api-platform/api-pack": "^1.2",
         "doctrine/doctrine-migrations-bundle": "^2.1",
-        "dompdf/dompdf": "^0.8.5",
+        "dompdf/dompdf": "^2.0.1",
         "lexik/jwt-authentication-bundle": "^2.6",
         "limenius/react-bundle": "^5.0",
         "symfony/asset": "5.0.*",
